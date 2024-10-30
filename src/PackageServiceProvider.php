@@ -1,6 +1,6 @@
 <?php
 
-namespace saloum45\controllergenerate;
+namespace saloum45\controllergenerate\src;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\File;
