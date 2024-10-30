@@ -1,16 +1,16 @@
 {
-    "name": "saloum45/dynamic-laravel",
+    "name": "saloum45/controllergenerate",
     "description": "Package pour générer des contrôleurs CRUD pour tous les modèles",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "saloum45\\dynamic-laravel\\": "src/"
+            "saloum45\\controllergenerate\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "saloum45\\dynamic-laravel\\PackageServiceProvider"
+                "saloum45\\controllergenerate\\PackageServiceProvider"
             ]
         }
     },
