@@ -1,7 +1,11 @@
 {
     "name": "saloum45/controllergenerate",
-    "description": "Package pour générer des contrôleurs CRUD pour tous les modèles",
+    "description": "Un package qui crée une commande avec du code dynamique",
     "type": "library",
+    "require": {
+        "php": ">=7.2",
+        "illuminate/support": "^8|^9|^10"
+    },
     "autoload": {
         "psr-4": {
             "saloum45\\controllergenerate\\": "src/"
@@ -13,9 +17,5 @@
                 "saloum45\\controllergenerate\\PackageServiceProvider"
             ]
         }
-    },
-    "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/support": "^10"
     }
 }
