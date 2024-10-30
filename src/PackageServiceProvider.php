@@ -4,6 +4,7 @@ namespace saloum45\controllergenerate;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\File;
+use Illuminate\Console\Command;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -50,5 +51,17 @@ class PackageServiceProvider extends ServiceProvider
             $commandContent = File::get($sourceRoutes);
             File::put($destinationRoutes, $commandContent);
         }
+
+        // Exécuter les commandes
+        $this->callCommands();
+    }
+
+    protected function callCommands()
+    {
+        // Exécuter la commande GenerateControllers
+        $this->app->make(\App\Console\Commands\GenerateControllers::class)->handle();
+
+        // Exécuter la commande GenerateRoutesFromControllers
+        $this->app->make(\App\Console\Commands\GenerateRoutesFromControllers::class)->handle();
     }
 }
