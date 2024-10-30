@@ -11,7 +11,7 @@ class GenerateControllers extends Command
 {
     protected $signature = 'generate:controllers';
     protected $description = 'Generate controllers for all models with CRUD methods';
-
+// 
     public function handle()
     {
         $modelsPath = app_path('Models');
