@@ -1,0 +1,21 @@
+{
+    "name": "saloum45/dynamic-laravel",
+    "description": "Package pour générer des contrôleurs CRUD pour tous les modèles",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "saloum45\\dynamic-laravel\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "saloum45\\dynamic-laravel\\PackageServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8|^9|^10"
+    }
+}
