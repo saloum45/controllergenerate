@@ -14,7 +14,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "saloum45\\controllergenerate\\src\\PackageServiceProvider"
+                "saloum45\\controllergenerate\\PackageServiceProvider"
             ]
         }
     }
