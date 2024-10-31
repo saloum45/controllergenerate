@@ -39,7 +39,7 @@ class GenerateRoutesFromControllers extends Command
 
         // Ajouter les routes au fichier api.php
         if (!empty($routesContent)) {
-            File::append($apiRoutesPath, "\n" . $routesContent);
+            File::put($apiRoutesPath, "\n" . $routesContent);
             $this->info("Les routes API ont été ajoutées au fichier api.php.");
         }
 
