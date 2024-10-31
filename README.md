@@ -1,5 +1,5 @@
 
-# ControllerGenerate
+# ControllerGenerate laravel
 
 Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, de migrations et de routes dans une application Laravel.
 
