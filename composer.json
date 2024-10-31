@@ -2,6 +2,7 @@
     "name": "saloum45/controllergenerate",
     "description": "😊Un package Laravel qui facilite la génération dynamique de contrôleurs,migrations et de routes dans une application Laravel. a Laravel package that makes it easy to dynamically generate controllers, migrations and routes in a Laravel application.😊",
     "type": "library",
+    "license": "MIT",
     "require": {
         "php": ">=7.2",
         "illuminate/support": "*"
