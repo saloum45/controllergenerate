@@ -1,17 +1,7 @@
 
 # ControllerGenerate
 
-Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs et de routes dans une application Laravel. Ce package automatise la création de contrôleurs CRUD (Create, Read, Update, Delete, Show) dans le dossier app/Models, et migrations dans le dossier database/migrations pour tous les modèles, ainsi que la génération de routes correspondantes, ce qui accélère considérablement le processus de développement et réduit la répétition du code.
-
-# Fonctionnalité 
-#### Génération automatique de contrôleurs : 
-Crée des contrôleurs pour chaque modèle existant dans le dossier app/Models avec des méthodes CRUD prêtes à l'emploi.
-
-#### Génération de routes : 
-Crée automatiquement des routes pour les contrôleurs générés, facilitant ainsi l'accès aux fonctionnalités CRUD via une API RESTful.
-
-#### Génération automatique de migrations : 
-Crée des migrations pour chaque modèle existant dans le dossier app/Models avec les attributs et même les clés étrangères.
+Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, de migrations et de routes dans une application Laravel.
 
 ### Comment ça marche 👉🏽👉🏽👉🏽👉🏽 😇NB😇: il faut d'abord créer les modèles avant d'installer le package 
 Installation : Ajoutez le package à votre projet Laravel via Composer en exécutant la commande suivante :
