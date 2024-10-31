@@ -30,7 +30,7 @@ class GenerateRoutesFromControllers extends Command
         foreach ($controllers as $controller) {
             $controllerName = $controller->getFilenameWithoutExtension();
             // S'assurer que c'est bien un contrôleur
-            if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'controller.php') {
+            if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller.php') {
                 $modelName = Str::replaceLast('Controller', '', $controllerName);
                 $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
                 $this->info("Routes pour $controllerName générées.");
