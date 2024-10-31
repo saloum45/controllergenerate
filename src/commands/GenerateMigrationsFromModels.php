@@ -78,11 +78,40 @@ class GenerateMigrationsFromModels extends Command
                     $columns
                     \$table->timestamps();
                 });
+        EOT;
+        
+        // Vérifier si le modèle est "Users"
+        if ($tableName === "Users"||$tableName === "User"||$tableName === "users"||$tableName === "user") {
+            $migrationContent .= <<<EOT
+        
+                Schema::create('password_reset_tokens', function (Blueprint \$table) {
+                    \$table->string('email')->primary();
+                    \$table->string('token');
+                    \$table->timestamp('created_at')->nullable();
+                });
+        
+                Schema::create('sessions', function (Blueprint \$table) {
+                    \$table->string('id')->primary();
+                    \$table->foreignId('user_id')->nullable()->index();
+                    \$table->string('ip_address', 45)->nullable();
+                    \$table->text('user_agent')->nullable();
+                    \$table->longText('payload');
+                    \$table->integer('last_activity')->index();
+                });
+        EOT;
+        }
+        
+        // Fin de la méthode up
+        $migrationContent .= <<<EOT
             }
         
             public function down()
             {
                 Schema::dropIfExists('$tableName');
+                if ('{$tableName}' === "Users"||'{$tableName}' === "User" ||'{$tableName}' === "user"||'{$tableName}' === "users") {
+                    Schema::dropIfExists('password_reset_tokens');
+                    Schema::dropIfExists('sessions');
+                }
             }
         };
         EOT;
