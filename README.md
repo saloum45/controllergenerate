@@ -8,7 +8,7 @@ Installation : Ajoutez le package à votre projet Laravel via Composer en exécu
 ```http
 composer require saloum45/controllergenerate
 ```
-Configuration : Le service provider du package, PackageServiceProvider, s'enregistre automatiquement lors de l'installation. Ce provider va créer les commandes nécessaires dans le dossier app/Console/Commands si elles n'existent pas déjà.
+Configuration : Le service provider du package, PackageServiceProvider, s'enregistre automatiquement lors de l'installation. Ce provider va créer les commandes nécessaires dans le dossier app/Console/Commands.
 
 Exécution des commandes :
 #### Pour générer les contrôleurs, exécutez la commande suivante dans votre terminal :
