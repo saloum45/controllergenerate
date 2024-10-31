@@ -11,7 +11,7 @@ class GenerateControllers extends Command
 {
     protected $signature = 'generate:controllers';
     protected $description = 'Generate controllers for all models with CRUD methods';
-// 
+    // 
     public function handle()
     {
         $modelsPath = app_path('Models');
@@ -63,6 +63,7 @@ class GenerateControllers extends Command
         $storeMethod = $this->generateStoreMethod($modelName, $fillable);
         $updateMethod = $this->generateUpdateMethod($modelName, $fillable);
         $destroyMethod = $this->generateDestroyMethod($modelName);
+        $showMethod = $this->generateShowMethod($modelName);
 
         return <<<EOT
 <?php
@@ -82,6 +83,8 @@ class {$controllerName} extends Controller
     {$updateMethod}
 
     {$destroyMethod}
+
+    {$showMethod}
 }
 EOT;
     }
@@ -222,4 +225,36 @@ EOT;
     }
 EOT;
     }
+
+    protected function generateShowMethod($modelName)
+{
+    $modelVar = Str::camel($modelName);
+
+    return <<<EOT
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  \$id
+     * @return \\Illuminate\\Http\\JsonResponse
+     */
+    public function show(\$id)
+    {
+        try {
+            \${$modelVar} = {$modelName}::findOrFail(\$id);
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => "Ressource trouvée",
+                'data' => \${$modelVar}
+            ]);
+        } catch (Exception \$e) {
+            return response()->json([
+                'status_code' => 404,
+                'status_message' => "Ressource non trouvée",
+                'error' => \$e->getMessage()
+            ], 404);
+        }
+    }
+EOT;
+}
+
 }
