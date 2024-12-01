@@ -29,7 +29,7 @@ php artisan generate:migrations-from-models
 
 #### Pour générer les seeders à partir des migrations, exécutez :
 ```http
-php artisan generate:seeder-from-migration
+php artisan generate:seeder-from-migrations
 ```
 
 #### Pour migrer et seeder, exécutez :
@@ -39,7 +39,7 @@ php artisan migrate
 ```http
 php artisan db:seed
 ```
-Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API
+Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API, pour bonus même les seeders sont gérés ...
 ##  👈🏽Bon code👉🏽
 # In English
 # ControllerGenerate laravel
@@ -71,5 +71,18 @@ php artisan generate:routes-from-controllers
 php artisan generate:migrations-from-models
 ```
 
-Result: After the commands are executed, controllers with CRUD methods will be created in the app/Http/Controllers folder, migrations in the database/migrations folder and the corresponding routes will be added to your API routes file
+####  To generate seeders from migrations, run :
+```http
+php artisan generate:seeder-from-migrations
+```
+
+#### to migrer and seed, run :
+```http
+php artisan migrate
+```
+```http
+php artisan db:seed
+```
+
+Result: After the commands are executed, controllers with CRUD methods will be created in the app/Http/Controllers folder, migrations in the database/migrations folder and the corresponding routes will be added to your API routes file, even the seed are okay ...
 ## 👈🏽Good code👉🏽
