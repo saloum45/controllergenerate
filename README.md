@@ -4,6 +4,8 @@
 Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, de migrations et de routes dans une application Laravel.
 #### tuto au complet : [![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
 ### Comment ça marche 👉🏽👉🏽👉🏽👉🏽 😇NB😇: il faut d'abord créer les modèles avant d'installer le package, car le package se base sur les modèles pour la génération.
+
+### Contrainte 👉🏽👉🏽👉🏽👉🏽 😇NB😇: pour les clés étrangères il faut respecter cette nomenclature : id_nom_de_table exemple : id_classe.
 Installation : Ajoutez le package à votre projet Laravel via Composer en exécutant la commande suivante :
 ```http
 composer require saloum45/controllergenerate
@@ -48,6 +50,8 @@ Saloum45/ControllerGenerate is a Laravel package that makes it easy to dynamical
 #### complete tuto : [![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
 
 ### How it works 👉🏽👉🏽👉🏽👉🏽 😇NB😇: you must first create the models before installing the package, because the package is based on the models for generation.
+
+### Constraints 👉🏽👉🏽👉🏽👉🏽 😇NB😇: for foreign keys you must respect this naming : id_table_name example : id_classe.
 Installation: Add the package to your Laravel project via Composer by running the following command:
 ```http
 composer require saloum45/controllergenerate
