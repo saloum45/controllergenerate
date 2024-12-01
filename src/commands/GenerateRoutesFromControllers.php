@@ -26,7 +26,7 @@ class GenerateRoutesFromControllers extends Command
         // Lister tous les contrôleurs dans le dossier Http/Controllers
         $controllers = File::files($controllerPath);
 
-        $routesContent="<?php \n use Illuminate\Support\Facades\Route;";
+        $routesContent="<?php \n use Illuminate\Support\Facades\Route;\n";
         foreach ($controllers as $controller) {
             $controllerName = $controller->getFilenameWithoutExtension();
             // S'assurer que c'est bien un contrôleur
@@ -52,7 +52,6 @@ class GenerateRoutesFromControllers extends Command
         $routeName = Str::kebab(Str::plural($modelName));
 
         return <<<EOT
-\n
 // Routes pour le contrôleur {$controllerName}
 use App\Http\Controllers\{$controllerName};
 Route::get('/{$routeName}', [$controllerName::class,'index']);
