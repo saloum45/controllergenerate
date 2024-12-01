@@ -22,10 +22,15 @@ class PackageServiceProvider extends ServiceProvider
             return new \App\Console\Commands\GenerateMigrationsFromModels();
         });
 
+        $this->app->singleton(\App\Console\Commands\GenerateSeederFromMigration::class, function () {
+            return new \App\Console\Commands\GenerateSeederFromMigration();
+        });
+
         $this->commands([
             \App\Console\Commands\GenerateControllers::class,
             \App\Console\Commands\GenerateRoutesFromControllers::class,
             \App\Console\Commands\GenerateMigrationsFromModels::class, // Enregistrement de la commande
+            \App\Console\Commands\GenerateSeederFromMigration::class
         ]);
     }
 
@@ -35,7 +40,8 @@ class PackageServiceProvider extends ServiceProvider
         $commands = [
             'GenerateControllers' => 'GenerateControllers.php',
             'GenerateRoutesFromControllers' => 'GenerateRoutesFromControllers.php',
-            'GenerateMigrationsFromModels' => 'GenerateMigrationsFromModels.php' // Chemin pour GenerateMigrationsFromModels
+            'GenerateMigrationsFromModels' => 'GenerateMigrationsFromModels.php', // Chemin pour GenerateMigrationsFromModels
+            'GenerateSeederFromMigration' => 'GenerateSeederFromMigration.php'
         ];
 
         foreach ($commands as $command => $file) {
