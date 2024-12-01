@@ -27,6 +27,18 @@ php artisan generate:routes-from-controllers
 php artisan generate:migrations-from-models
 ```
 
+#### Pour générer les seeders à partir des migrations, exécutez :
+```http
+php artisan generate:seeder-from-migration
+```
+
+#### Pour migrer et seeder, exécutez :
+```http
+php artisan migrate
+```
+```http
+php artisan db:seed
+```
 Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API
 ##  👈🏽Bon code👉🏽
 # In English
