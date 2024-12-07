@@ -26,15 +26,13 @@ class GenerateRoutesFromControllers extends Command
         // Lister tous les contrôleurs dans le dossier Http/Controllers
         $controllers = File::files($controllerPath);
 
-        $routesContent="<?php \n use Illuminate\Support\Facades\Route;\n";
+        $routesContent="<?php \nuse Illuminate\Support\Facades\Route;\n";
         foreach ($controllers as $controller) {
             $controllerName = $controller->getFilenameWithoutExtension();
             // S'assurer que c'est bien un contrôleur
             if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller') {
                 $modelName = Str::replaceLast('Controller', '', $controllerName);
                 $routesContent .= "use App\Http\Controllers\\".$controllerName.";\n";
-                // $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
-                // $this->info("Routes pour $controllerName générées.");
             }
         }
         $routesContent .= "\n";
