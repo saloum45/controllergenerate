@@ -44,7 +44,6 @@ class GenerateSeederFromMigration extends Command
             // Récupérer le nom de la table en cherchant "create('table_name')"
             if (preg_match("/Schema::create\('([^']+)'/", $fileContent, $matches)) {
                 $tableName = $matches[1];
-
                 // Récupérer les colonnes de la migration
                 $fillable = $this->extractColumnsFromMigration($fileContent);
 
@@ -88,7 +87,7 @@ class GenerateSeederFromMigration extends Command
         $seederName = "{$modelName}Seeder";
         $fileName = "{$seederName}.php";
         $seederFile = $seederPath . '/' . $fileName;
-
+        $this->updateDatabaseSeeder($seederName);
         $fakerAssignments = '';
         foreach ($fillable as $field) {
             // Détection des types de données à partir des conventions de noms
@@ -136,5 +135,37 @@ class {$seederName} extends Seeder
 EOT;
 
         File::put($seederFile, $seederContent);
+    }
+
+    protected function updateDatabaseSeeder($tableName): void
+    {
+        $databaseSeederPath = database_path('seeders/DatabaseSeeder.php');
+
+        // Lire le contenu du fichier
+        $databaseContent = File::get($databaseSeederPath);
+
+        // Le contenu à insérer
+        $newLine = "        \$this->call($tableName::class);\n";
+        // Trouver l'emplacement de la méthode run
+        $pattern = '/public function run\(\): void\s*\{\n/';
+        if (preg_match($pattern, $databaseContent, $matches, PREG_OFFSET_CAPTURE)) {
+            // Position pour insérer le nouveau code
+            $insertPosition = $matches[0][1] + strlen($matches[0][0]);
+
+            // Ajouter le nouveau contenu à la bonne position
+            $updatedContent = substr_replace($databaseContent, $newLine, $insertPosition, 0);
+
+            // Vérifier si le contenu existe déjà pour éviter les doublons
+            if (str_contains($databaseContent, $newLine)) {
+                $this->error("$tableName::class est déjà dans la méthode run().");
+            } else {
+
+                // Réécrire le fichier avec le contenu mis à jour
+                File::put($databaseSeederPath, $updatedContent);
+                $this->info("Le seeder $tableName::class a été ajouté avec succès au fichier DatabaseSeeder.");
+            }
+        } else {
+            $this->error("Impossible de trouver la méthode run() dans DatabaseSeeder.");
+        }
     }
 }
