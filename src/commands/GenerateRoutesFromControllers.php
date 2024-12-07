@@ -32,6 +32,17 @@ class GenerateRoutesFromControllers extends Command
             // S'assurer que c'est bien un contrôleur
             if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller') {
                 $modelName = Str::replaceLast('Controller', '', $controllerName);
+                $routesContent .= "use App\Http\Controllers\\".$controllerName.";\n";
+                // $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
+                // $this->info("Routes pour $controllerName générées.");
+            }
+        }
+        $routesContent .= "\n";
+        foreach ($controllers as $controller) {
+            $controllerName = $controller->getFilenameWithoutExtension();
+            // S'assurer que c'est bien un contrôleur
+            if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller') {
+                $modelName = Str::replaceLast('Controller', '', $controllerName);
                 $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
                 $this->info("Routes pour $controllerName générées.");
             }
@@ -53,7 +64,6 @@ class GenerateRoutesFromControllers extends Command
 
         return <<<EOT
 // Routes pour le contrôleur {$controllerName}
-use App\Http\Controllers\{$controllerName};
 Route::get('/{$routeName}', [$controllerName::class,'index']);
 Route::post('/{$routeName}', [$controllerName::class,'store']);
 Route::put('/{$routeName}/{id}', [$controllerName::class,'update']);
