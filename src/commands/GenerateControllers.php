@@ -71,8 +71,10 @@ class GenerateControllers extends Command
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\GenerateApiResponse;
 use {$modelClass};
 use Exception;
+use GenerateApiResponse;
 
 class {$controllerName} extends Controller
 {
@@ -101,17 +103,9 @@ EOT;
     {
         try {
             \$data = {$modelName}::all();
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => "Récupération réussie",
-                'data' => \$data
-            ]);
+            return \$this->successResponse(\$data, 'Récupération réussie');
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Récupération échouée',
-                'error' => \$e->getMessage()
-            ], 500);
+            return \$this->errorResponse('Récupération échouée', 500, \$e->getMessage());
         }
     }
 EOT;
@@ -138,18 +132,10 @@ EOT;
             \${$modelVar} = new {$modelName}();
             {$fieldsAssignment}
             if (\${$modelVar}->save()) {
-                return response()->json([
-                    'status_code' => 200,
-                    'status_message' => "Insertion réussie",
-                    'data' => \${$modelVar}
-                ]);
+                return \$this->successResponse(\${$modelVar}, 'Récupération réussie');
             }
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Insertion échouée',
-                'error' => \$e->getMessage()
-            ], 500);
+            return \$this->errorResponse('Insertion échouée', 500, \$e->getMessage());
         }
     }
 EOT;
@@ -177,18 +163,10 @@ EOT;
             \${$modelVar} = {$modelName}::findOrFail(\$id);
             {$fieldsAssignment}
             if (\${$modelVar}->save()) {
-                return response()->json([
-                    'status_code' => 200,
-                    'status_message' => "Mise à jour réussie",
-                    'data' => \${$modelVar}
-                ]);
+                return \$this->successResponse(\${$modelVar}, 'Mise à jour réussie');
             }
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Mise à jour échouée',
-                'error' => \$e->getMessage()
-            ], 500);
+            return \$this->errorResponse('Mise à jour échouée', 500, \$e->getMessage());
         }
     }
 EOT;
@@ -210,17 +188,10 @@ EOT;
         try {
             \${$modelVar} = {$modelName}::findOrFail(\$id);
             if (\${$modelVar}->delete()) {
-                return response()->json([
-                    'status_code' => 200,
-                    'status_message' => "Suppression réussie"
-                ]);
+                return \$this->successResponse(\${$modelVar}, 'Suppression réussie');
             }
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Suppression échouée',
-                'error' => \$e->getMessage()
-            ], 500);
+            return \$this->errorResponse('Suppression échouée', 500, \$e->getMessage());
         }
     }
 EOT;
@@ -241,17 +212,9 @@ EOT;
     {
         try {
             \${$modelVar} = {$modelName}::findOrFail(\$id);
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => "Ressource trouvée",
-                'data' => \${$modelVar}
-            ]);
+             return \$this->successResponse(\${$modelVar}, 'Ressource trouvée');
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 404,
-                'status_message' => "Ressource non trouvée",
-                'error' => \$e->getMessage()
-            ], 404);
+            return \$this->errorResponse('Ressource non trouvée', 404, \$e->getMessage());
         }
     }
 EOT;

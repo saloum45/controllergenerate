@@ -45,7 +45,7 @@ class PackageServiceProvider extends ServiceProvider
         ];
 
         foreach ($commands as $command => $file) {
-            $source = __DIR__."/Commands/{$file}";
+            $source = __DIR__ . "/Commands/{$file}";
             $destination = app_path("Console/Commands/{$file}");
 
             // Vérifier et copier si la commande n'existe pas encore
@@ -53,6 +53,15 @@ class PackageServiceProvider extends ServiceProvider
                 File::ensureDirectoryExists(app_path('Console/Commands'));
                 File::put($destination, File::get($source));
             }
+        }
+
+        // Chemins source et destination pour les traits
+        $sourceTrait = __DIR__ . '/Commands/GenerateApiResponse.php';
+        $destinationTrait = app_path('Traits/GenerateApiResponse.php');
+
+        if (!File::exists($destinationTrait)) {
+            File::ensureDirectoryExists(app_path('Traits'));
+            File::copy($sourceTrait, $destinationTrait);
         }
     }
 }
