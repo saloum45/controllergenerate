@@ -13,7 +13,7 @@ class GenerateSeeders extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:seeder-from-migrations';
+    protected $signature = 'generate:seeders';
 
     /**
      * The console command description.

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class GenerateRoutes extends Command
 {
-    protected $signature = 'generate:routes-from-controllers';
+    protected $signature = 'generate:routes';
     protected $description = 'Generate API routes from existing controllers and install API';
 
     public function handle()
