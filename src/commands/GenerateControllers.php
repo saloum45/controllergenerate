@@ -251,7 +251,7 @@ EOT;
      *
      * @return \\Illuminate\\Http\\JsonResponse
      */
-    public function getFormDetails()
+    public function getformdetails()
     {
         try {
 $queries

@@ -67,6 +67,7 @@ Route::post('/{$routeName}', [$controllerName::class,'store']);
 Route::put('/{$routeName}/{id}', [$controllerName::class,'update']);
 Route::delete('/{$routeName}/{id}', [$controllerName::class,'destroy']);
 Route::get('/{$routeName}/{id}', [$controllerName::class, 'show']);
+Route::get('/{$routeName}/getformdetails', [$controllerName::class, 'getformdetails']);
 \n
 EOT;
     }
