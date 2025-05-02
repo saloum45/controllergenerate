@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class GenerateMigrations extends Command
 {
-    protected $signature = 'generate:migrations-from-models';
+    protected $signature = 'generate:migrations';
     protected $description = 'Generate migrations from existing models based on $fillable attributes';
 
     public function handle()
