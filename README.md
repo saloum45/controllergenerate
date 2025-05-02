@@ -18,26 +18,23 @@ Exécution des commandes :
 php artisan generate:controllers
 ```
 
-#### Pour générer les routes à partir des contrôleurs, exécutez :
+#### Pour générer les routes, exécutez :
 
 ```http
 php artisan generate:routes
 ```
 
-#### Pour générer les migrations à partir des modèles, exécutez :
+#### Pour générer les migrations, exécutez :
 ```http
 php artisan generate:migrations
-```
-
-#### Pour générer les seeders à partir des migrations, exécutez :
-```http
-php artisan generate:seeders
 ```
 
 #### Pour migrer et seeder, exécutez :
 ```http
 php artisan migrate
 ```
+```
+
 Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API, pour bonus même les seeders sont gérés ...
 ##  👈🏽Bon code👉🏽
 # In English
@@ -61,20 +58,15 @@ Order execution:
 php artisan generate:controllers
 ```
 
-#### To generate routes from controllers, run:
+#### To generate routes, run:
 
 ```http
 php artisan generate:routes
 ```
 
-#### To generate migrations from templates, run:
+#### To generate migrations, run:
 ```http
 php artisan generate:migrations
-```
-
-####  To generate seeders from migrations, run :
-```http
-php artisan generate:seeders
 ```
 
 #### to migrer and seed, run :
