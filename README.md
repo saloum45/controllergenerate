@@ -21,17 +21,17 @@ php artisan generate:controllers
 #### Pour générer les routes à partir des contrôleurs, exécutez :
 
 ```http
-php artisan generate:routes-from-controllers
+php artisan generate:routes
 ```
 
 #### Pour générer les migrations à partir des modèles, exécutez :
 ```http
-php artisan generate:migrations-from-models
+php artisan generate:migrations
 ```
 
 #### Pour générer les seeders à partir des migrations, exécutez :
 ```http
-php artisan generate:seeder-from-migrations
+php artisan generate:seeders
 ```
 
 #### Pour migrer et seeder, exécutez :
@@ -67,17 +67,17 @@ php artisan generate:controllers
 #### To generate routes from controllers, run:
 
 ```http
-php artisan generate:routes-from-controllers
+php artisan generate:routes
 ```
 
 #### To generate migrations from templates, run:
 ```http
-php artisan generate:migrations-from-models
+php artisan generate:migrations
 ```
 
 ####  To generate seeders from migrations, run :
 ```http
-php artisan generate:seeder-from-migrations
+php artisan generate:seeders
 ```
 
 #### to migrer and seed, run :
