@@ -84,9 +84,7 @@ php artisan generate:seeders
 ```http
 php artisan migrate
 ```
-```http
-php artisan db:seed
-```
+
 
 Result: After the commands are executed, controllers with CRUD methods will be created in the app/Http/Controllers folder, migrations in the database/migrations folder and the corresponding routes will be added to your API routes file, even the seed are okay ...
 ## 👈🏽Good code👉🏽
