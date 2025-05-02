@@ -74,10 +74,11 @@ use Illuminate\Http\Request;
 use App\Traits\GenerateApiResponse;
 use {$modelClass};
 use Exception;
-use GenerateApiResponse;
 
 class {$controllerName} extends Controller
 {
+    use GenerateApiResponse;
+    
     {$indexMethod}
 
     {$storeMethod}
