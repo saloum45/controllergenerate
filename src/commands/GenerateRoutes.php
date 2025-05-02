@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class GenerateRoutesFromControllers extends Command
+class GenerateRoutes extends Command
 {
     protected $signature = 'generate:routes-from-controllers';
     protected $description = 'Generate API routes from existing controllers and install API';

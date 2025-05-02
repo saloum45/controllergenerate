@@ -14,23 +14,23 @@ class PackageServiceProvider extends ServiceProvider
             return new \App\Console\Commands\GenerateControllers();
         });
 
-        $this->app->singleton(\App\Console\Commands\GenerateRoutesFromControllers::class, function () {
-            return new \App\Console\Commands\GenerateRoutesFromControllers();
+        $this->app->singleton(\App\Console\Commands\GenerateRoutes::class, function () {
+            return new \App\Console\Commands\GenerateRoutes();
         });
 
-        $this->app->singleton(\App\Console\Commands\GenerateMigrationsFromModels::class, function () {
-            return new \App\Console\Commands\GenerateMigrationsFromModels();
+        $this->app->singleton(\App\Console\Commands\GenerateMigrations::class, function () {
+            return new \App\Console\Commands\GenerateMigrations();
         });
 
-        $this->app->singleton(\App\Console\Commands\GenerateSeederFromMigration::class, function () {
-            return new \App\Console\Commands\GenerateSeederFromMigration();
+        $this->app->singleton(\App\Console\Commands\GenerateSeeders::class, function () {
+            return new \App\Console\Commands\GenerateSeeders();
         });
 
         $this->commands([
             \App\Console\Commands\GenerateControllers::class,
-            \App\Console\Commands\GenerateRoutesFromControllers::class,
-            \App\Console\Commands\GenerateMigrationsFromModels::class, // Enregistrement de la commande
-            \App\Console\Commands\GenerateSeederFromMigration::class
+            \App\Console\Commands\GenerateRoutes::class,
+            \App\Console\Commands\GenerateMigrations::class, // Enregistrement de la commande
+            \App\Console\Commands\GenerateSeeders::class
         ]);
     }
 
@@ -39,9 +39,9 @@ class PackageServiceProvider extends ServiceProvider
         // Chemins source et destination pour les commandes
         $commands = [
             'GenerateControllers' => 'GenerateControllers.php',
-            'GenerateRoutesFromControllers' => 'GenerateRoutesFromControllers.php',
-            'GenerateMigrationsFromModels' => 'GenerateMigrationsFromModels.php', // Chemin pour GenerateMigrationsFromModels
-            'GenerateSeederFromMigration' => 'GenerateSeederFromMigration.php'
+            'GenerateRoutes' => 'GenerateRoutes.php',
+            'GenerateMigrations' => 'GenerateMigrations.php', // Chemin pour GenerateMigrations
+            'GenerateSeeders' => 'GenerateSeeders.php'
         ];
 
         foreach ($commands as $command => $file) {

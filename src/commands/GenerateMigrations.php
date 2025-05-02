@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use ReflectionClass;
 
-class GenerateMigrationsFromModels extends Command
+class GenerateMigrations extends Command
 {
     protected $signature = 'generate:migrations-from-models';
     protected $description = 'Generate migrations from existing models based on $fillable attributes';
