@@ -64,6 +64,8 @@ class GenerateControllers extends Command
         $updateMethod = $this->generateUpdateMethod($modelName, $fillable);
         $destroyMethod = $this->generateDestroyMethod($modelName);
         $showMethod = $this->generateShowMethod($modelName);
+        $getFormDetails=$this->generateGetFormDetailsMethod($fillable);
+        
 
         return <<<EOT
 <?php
@@ -88,6 +90,8 @@ class {$controllerName} extends Controller
     {$destroyMethod}
 
     {$showMethod}
+
+    {$getFormDetails}
 }
 EOT;
     }
@@ -199,10 +203,10 @@ EOT;
     }
 
     protected function generateShowMethod($modelName)
-{
-    $modelVar = Str::camel($modelName);
+    {
+        $modelVar = Str::camel($modelName);
 
-    return <<<EOT
+        return <<<EOT
     /**
      * Display the specified resource.
      *
@@ -216,6 +220,46 @@ EOT;
              return \$this->successResponse(\${$modelVar}, 'Ressource trouvée');
         } catch (Exception \$e) {
             return \$this->errorResponse('Ressource non trouvée', 404, \$e->getMessage());
+        }
+    }
+EOT;
+    }
+
+    protected function generateGetFormDetailsMethod($fillable)
+{
+    $foreignTables = array_filter($fillable, function ($field) {
+        return str_starts_with($field, 'id_');
+    });
+
+    $queries = '';
+    foreach ($foreignTables as $field) {
+        $table = Str::plural(str_replace('id_', '', $field));
+        $variable = Str::camel($table);
+        $model = Str::studly(Str::singular($table));
+        $queries .= "        \$$variable = \App\\Models\\$model::all();\n";
+    }
+
+    $responseArray = implode(",\n            ", array_map(function ($field) {
+        $table = Str::plural(str_replace('id_', '', $field));
+        $variable = Str::camel($table);
+        return "'$variable' => \$$variable";
+    }, $foreignTables));
+
+    return <<<EOT
+    /**
+     * Get related form details for foreign keys.
+     *
+     * @return \\Illuminate\\Http\\JsonResponse
+     */
+    public function getFormDetails()
+    {
+        try {
+$queries
+            return \$this->successResponse([
+                $responseArray
+            ], 'Données du formulaire récupérées avec succès');
+        } catch (Exception \$e) {
+            return \$this->errorResponse('Erreur lors de la récupération des données du formulaire', 500, \$e->getMessage());
         }
     }
 EOT;
