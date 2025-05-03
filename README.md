@@ -70,7 +70,7 @@ php artisan generate:migrations
 
 #### to migrer and seed, run :
 ```http
-php artisan migrate
+php artisan migrate 
 ```
 
 
