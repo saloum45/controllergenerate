@@ -136,7 +136,7 @@ EOT;
         try {
             \${$modelVar} = new {$modelName}();
             {$fieldsAssignment}
-            \${$modelVar}->save()
+            \${$modelVar}->save();
                 return \$this->successResponse(\${$modelVar}, 'Récupération réussie');
             
         } catch (Exception \$e) {
@@ -167,7 +167,7 @@ EOT;
         try {
             \${$modelVar} = {$modelName}::findOrFail(\$id);
             {$fieldsAssignment}
-            \${$modelVar}->save()
+            \${$modelVar}->save();
                 return \$this->successResponse(\${$modelVar}, 'Mise à jour réussie');
         } catch (Exception \$e) {
             return \$this->errorResponse('Mise à jour échouée', 500, \$e->getMessage());
@@ -191,7 +191,7 @@ EOT;
     {
         try {
             \${$modelVar} = {$modelName}::findOrFail(\$id);
-            \${$modelVar}->delete()
+            \${$modelVar}->delete();
                 return \$this->successResponse(\${$modelVar}, 'Suppression réussie');
         } catch (Exception \$e) {
             return \$this->errorResponse('Suppression échouée', 500, \$e->getMessage());
