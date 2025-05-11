@@ -136,9 +136,7 @@ EOT;
         try {
             \${$modelVar} = new {$modelName}();
             {$fieldsAssignment}
-            if (\${$modelVar}->save()) {
                 return \$this->successResponse(\${$modelVar}, 'Récupération réussie');
-            }
         } catch (Exception \$e) {
             return \$this->errorResponse('Insertion échouée', 500, \$e->getMessage());
         }
