@@ -21,6 +21,10 @@ php artisan generate:controllers
 #### Pour générer les routes, exécutez :
 
 ```http
+php artisan install:api
+```
+
+```http
 php artisan generate:routes
 ```
 
@@ -58,6 +62,10 @@ php artisan generate:controllers
 ```
 
 #### To generate routes, run:
+
+```http
+php artisan install:api
+```
 
 ```http
 php artisan generate:routes

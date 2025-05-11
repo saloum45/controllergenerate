@@ -53,7 +53,7 @@ class GenerateRoutes extends Command
         }
 
         // Installer l'API via la commande artisan
-        $this->call('install:api');
+        // $this->call('install:api');
     }
 
     protected function generateApiRoutes($modelName, $controllerName)
