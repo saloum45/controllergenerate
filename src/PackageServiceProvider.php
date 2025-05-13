@@ -25,12 +25,16 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Console\Commands\GenerateSeeders::class, function () {
             return new \App\Console\Commands\GenerateSeeders();
         });
+        $this->app->singleton(\App\Console\Commands\GenerateAngularJson::class, function () {
+            return new \App\Console\Commands\GenerateAngularJson();
+        });
 
         $this->commands([
             \App\Console\Commands\GenerateControllers::class,
             \App\Console\Commands\GenerateRoutes::class,
             \App\Console\Commands\GenerateMigrations::class, // Enregistrement de la commande
-            \App\Console\Commands\GenerateSeeders::class
+            \App\Console\Commands\GenerateSeeders::class,
+            \App\Console\Commands\GenerateAngularJson::class
         ]);
     }
 
@@ -41,7 +45,8 @@ class PackageServiceProvider extends ServiceProvider
             'GenerateControllers' => 'GenerateControllers.php',
             'GenerateRoutes' => 'GenerateRoutes.php',
             'GenerateMigrations' => 'GenerateMigrations.php', // Chemin pour GenerateMigrations
-            'GenerateSeeders' => 'GenerateSeeders.php'
+            'GenerateSeeders' => 'GenerateSeeders.php',
+            'GenerateAngularJson' => 'GenerateAngularJson.php'
         ];
 
         foreach ($commands as $command => $file) {
