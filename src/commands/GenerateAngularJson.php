@@ -31,9 +31,9 @@ class GenerateAngularJson extends Command
                     'module' => 'public',
                     'les_tables' => [
                         [
-                        'table' => 'login',
-                        'description' => ['login','mot_de_passe'],
-                        'les_types' => ['login']
+                            'table' => 'login',
+                            'description' => ['login', 'mot_de_passe'],
+                            'les_types' => ['login']
                         ]
                     ]
                 ]
@@ -109,16 +109,21 @@ class GenerateAngularJson extends Command
 
                 $columnDetails[] = $col;
             }
-
+            $filteredColumnDetails = array_filter($columnDetails, function ($col) {
+                return !in_array($col['Field'], ['created_at', 'updated_at']);
+            });
             $tableJson = [
                 'table' => $tableName,
-                'description' => array_column($columnDetails, 'Field'),
+                'description' => array_values(array_filter(array_column($columnDetails, 'Field'), function ($field) {
+                    return !in_array($field, ['created_at', 'updated_at']);
+                })),
+
                 'table_descriptions' => [
                     'table_name' => $tableName,
                     'cle_primaire' => collect($columnDetails)->firstWhere('Key', 'PRI'),
                     'les_based_table_name' => array_values(array_unique($basedTables)),
                     'les_referenced_table' => array_values(array_unique($referencedTables)),
-                    'les_colonnes' => $columnDetails
+                    'les_colonnes' => array_values($filteredColumnDetails)
                 ],
                 'les_types' => ['add', 'edit', 'list', 'details']
             ];
