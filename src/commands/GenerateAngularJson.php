@@ -21,7 +21,7 @@ class GenerateAngularJson extends Command
         $json = [
             'projectName' => 'projet1.angular',
             'decription' => 'Fichier de configuration de Taf',
-            'taf_base_url' => 'http://localhost:8000/api',
+            'taf_base_url' => 'http://localhost:8000/api/',
             'les_modules' => [
                 [
                     'module' => 'home',
