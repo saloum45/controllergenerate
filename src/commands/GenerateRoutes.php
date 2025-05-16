@@ -58,7 +58,7 @@ class GenerateRoutes extends Command
 
     protected function generateApiRoutes($modelName, $controllerName)
     {
-        $routeName = Str::kebab(Str::plural($modelName));
+        $routeName = Str::snake(Str::plural($modelName));
 
         return <<<EOT
 // Routes pour le contrôleur {$controllerName}
