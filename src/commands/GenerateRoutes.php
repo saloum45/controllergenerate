@@ -26,20 +26,20 @@ class GenerateRoutes extends Command
         // Lister tous les contrôleurs dans le dossier Http/Controllers
         $controllers = File::files($controllerPath);
 
-        $routesContent="<?php \nuse Illuminate\Support\Facades\Route;\n";
+        $routesContent = "<?php \nuse Illuminate\Support\Facades\Route;\n";
         foreach ($controllers as $controller) {
             $controllerName = $controller->getFilenameWithoutExtension();
             // S'assurer que c'est bien un contrôleur
-            if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller') {
+            if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
                 $modelName = Str::replaceLast('Controller', '', $controllerName);
-                $routesContent .= "use App\Http\Controllers\\".$controllerName.";\n";
+                $routesContent .= "use App\Http\Controllers\\" . $controllerName . ";\n";
             }
         }
         $routesContent .= "\n";
         foreach ($controllers as $controller) {
             $controllerName = $controller->getFilenameWithoutExtension();
             // S'assurer que c'est bien un contrôleur
-            if (Str::endsWith($controllerName, 'Controller')&& $controllerName !== 'Controller') {
+            if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
                 $modelName = Str::replaceLast('Controller', '', $controllerName);
                 $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
                 $this->info("Routes pour $controllerName générées.");
@@ -53,22 +53,32 @@ class GenerateRoutes extends Command
         }
 
         // Installer l'API via la commande artisan
-        // $this->call('install:api');
+        $this->call('install:api');
     }
 
     protected function generateApiRoutes($modelName, $controllerName)
     {
         $routeName = Str::snake(Str::plural($modelName));
 
-        return <<<EOT
+        $routes = <<<EOT
 // Routes pour le contrôleur {$controllerName}
-Route::get('/{$routeName}', [$controllerName::class,'index']);
-Route::post('/{$routeName}', [$controllerName::class,'store']);
-Route::put('/{$routeName}/{id}', [$controllerName::class,'update']);
-Route::delete('/{$routeName}/{id}', [$controllerName::class,'destroy']);
-Route::get('/{$routeName}/{id}', [$controllerName::class, 'show'])->where('id', '[0-9]+');
-Route::get('/{$routeName}/getformdetails', [$controllerName::class, 'getformdetails']);
-\n
+Route::get('/{$routeName}', [{$controllerName}::class, 'index']);
+Route::post('/{$routeName}', [{$controllerName}::class, 'store']);
+Route::put('/{$routeName}/{id}', [{$controllerName}::class, 'update']);
+Route::delete('/{$routeName}/{id}', [{$controllerName}::class, 'destroy']);
+Route::get('/{$routeName}/{id}', [{$controllerName}::class, 'show'])->where('id', '[0-9]+');
+Route::get('/{$routeName}/getformdetails', [{$controllerName}::class, 'getformdetails']);
 EOT;
+
+        // Si le contrôleur est UserController, ajouter les routes login/logout
+        if ($controllerName === 'UserController') {
+            $routes .= <<<EOT
+
+Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout']);
+EOT;
+        }
+
+        return $routes . "\n\n";
     }
 }
