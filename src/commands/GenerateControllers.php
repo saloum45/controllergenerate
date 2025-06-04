@@ -11,7 +11,7 @@ class GenerateControllers extends Command
 {
     protected $signature = 'generate:controllers';
     protected $description = 'Generate controllers for all models with CRUD methods';
-    // 
+    //
     public function handle()
     {
         $modelsPath = app_path('Models');
@@ -64,8 +64,13 @@ class GenerateControllers extends Command
         $updateMethod = $this->generateUpdateMethod($modelName, $fillable);
         $destroyMethod = $this->generateDestroyMethod($modelName);
         $showMethod = $this->generateShowMethod($modelName);
-        $getFormDetails=$this->generateGetFormDetailsMethod($fillable);
-        
+        $getFormDetails = $this->generateGetFormDetailsMethod($fillable);
+        $generateUserAuthMethod = '';
+        $hashImport = '';
+        if (strtolower($modelName) === 'user') {
+            $generateUserAuthMethod = $this->generateUserAuthMethod($modelName);
+            $hashImport = "use Illuminate\\Support\\Facades\\Hash;\n";
+        }
 
         return <<<EOT
 <?php
@@ -75,12 +80,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Traits\GenerateApiResponse;
 use {$modelClass};
+{$hashImport}
 use Exception;
+
 
 class {$controllerName} extends Controller
 {
     use GenerateApiResponse;
-    
+
     {$indexMethod}
 
     {$storeMethod}
@@ -92,6 +99,8 @@ class {$controllerName} extends Controller
     {$showMethod}
 
     {$getFormDetails}
+
+    {$generateUserAuthMethod}
 }
 EOT;
     }
@@ -138,7 +147,7 @@ EOT;
             {$fieldsAssignment}
             \${$modelVar}->save();
                 return \$this->successResponse(\${$modelVar}, 'Récupération réussie');
-            
+
         } catch (Exception \$e) {
             return \$this->errorResponse('Insertion échouée', 500, \$e->getMessage());
         }
@@ -224,26 +233,26 @@ EOT;
     }
 
     protected function generateGetFormDetailsMethod($fillable)
-{
-    $foreignTables = array_filter($fillable, function ($field) {
-        return str_starts_with($field, 'id_');
-    });
+    {
+        $foreignTables = array_filter($fillable, function ($field) {
+            return str_starts_with($field, 'id_');
+        });
 
-    $queries = '';
-    foreach ($foreignTables as $field) {
-        $table = Str::plural(str_replace('id_', '', $field));
-        $variable = Str::camel($table);
-        $model = Str::studly(Str::singular($table));
-        $queries .= "        \$$variable = \App\\Models\\$model::all();\n";
-    }
+        $queries = '';
+        foreach ($foreignTables as $field) {
+            $table = Str::plural(str_replace('id_', '', $field));
+            $variable = Str::camel($table);
+            $model = Str::studly(Str::singular($table));
+            $queries .= "        \$$variable = \App\\Models\\$model::all();\n";
+        }
 
-    $responseArray = implode(",\n            ", array_map(function ($field) {
-        $table = Str::plural(str_replace('id_', '', $field));
-        $variable = Str::camel($table);
-        return "'$variable' => \$$variable";
-    }, $foreignTables));
+        $responseArray = implode(",\n            ", array_map(function ($field) {
+            $table = Str::plural(str_replace('id_', '', $field));
+            $variable = Str::camel($table);
+            return "'$variable' => \$$variable";
+        }, $foreignTables));
 
-    return <<<EOT
+        return <<<EOT
     /**
      * Get related form details for foreign keys.
      *
@@ -261,6 +270,70 @@ $queries
         }
     }
 EOT;
-}
+    }
 
+    protected function generateUserAuthMethod($modelName)
+    {
+
+        # code...
+
+        return <<<EOT
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  \$id
+     * @return \\Illuminate\\Http\\JsonResponse
+     */
+    public function login(Request \$request)
+    {
+        \$request->validate([
+            'email' => 'required',
+            'mot_de_passe' => 'required|string',
+        ]);
+
+        try {
+
+            // \$user = User::where('email', \$request->email)->first();
+            \$user = User::where('email', \$request->email)->first();
+            if (!\$user || !Hash::check(\$request->mot_de_passe, \$user->password)) {
+                return response()->json([
+                    'status_code' => 401,
+                    'status_message' => 'telephone ou mot de passe incorrect.'
+                ], 401);
+            }
+
+            \$token = \$user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Connexion réussie',
+                'data' => \$user,
+                'token' => \$token
+            ], 200);
+        } catch (Exception \$e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'Erreur lors de la connexion',
+                'error' => \$e->getMessage()
+            ], 500);
+        }
+    }
+    public function logout(Request \$request)
+    {
+        try {
+            \$request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Déconnexion réussie'
+            ]);
+        } catch (Exception \$e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'Erreur lors de la déconnexion',
+                'error' => \$e->getMessage()
+            ], 500);
+        }
+    }
+    EOT;
+    }
 }
