@@ -43,7 +43,7 @@ php artisan generate:relations
 php artisan migrate
 ```
 
-Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API, pour bonus même les seeders sont gérés ...
+Résultat : Une fois les commandes exécutées, des contrôleurs avec des méthodes CRUD seront créés dans le dossier app/Http/Controllers, des migrations dans le dossier database/migrations et les routes correspondantes seront ajoutées à votre fichier de routes API, pour bonus même les relations entre models sont gérées ...
 ##  👈🏽Bon code👉🏽
 # In English
 # ControllerGenerate laravel
@@ -92,5 +92,5 @@ php artisan migrate
 ```
 
 
-Result: After the commands are executed, controllers with CRUD methods will be created in the app/Http/Controllers folder, migrations in the database/migrations folder and the corresponding routes will be added to your API routes file, even the seed are okay ...
+Result: After the commands are executed, controllers with CRUD methods will be created in the app/Http/Controllers folder, migrations in the database/migrations folder and the corresponding routes will be added to your API routes file, even the models relations are okay ...
 ## 👈🏽Good code👉🏽
