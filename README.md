@@ -33,6 +33,11 @@ php artisan generate:routes
 php artisan generate:migrations
 ```
 
+#### Pour générer les relations entre modeles, exécutez :
+```http
+php artisan generate:relations
+```
+
 #### Pour migrer et seeder, exécutez :
 ```http
 php artisan migrate
@@ -74,6 +79,11 @@ php artisan generate:routes
 #### To generate migrations, run:
 ```http
 php artisan generate:migrations
+```
+
+#### To generate relations between models, run:
+```http
+php artisan generate:relations
 ```
 
 #### to migrer and seed, run :
