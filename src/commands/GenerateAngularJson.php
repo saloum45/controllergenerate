@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class GenerateAngularJson extends Command
 {
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
     protected $signature = 'taf:angular-json';
     protected $description = 'Génère un fichier JSON de configuration à partir de la base de données';
 
@@ -133,5 +134,6 @@ class GenerateAngularJson extends Command
 
         File::put(base_path('taf.config.json'), json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         $this->info('Fichier taf_config.json généré avec succès.');
+        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
     }
 }

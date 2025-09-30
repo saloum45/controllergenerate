@@ -9,7 +9,8 @@ use ReflectionClass;
 
 class GenerateMigrations extends Command
 {
-    protected $signature = 'generate:migrations';
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    protected $signature = 'generate:migrations {model?}';
     protected $description = 'Generate migrations from existing models based on $fillable attributes and sort them by foreign key dependencies';
 
     public function handle()
@@ -31,30 +32,42 @@ class GenerateMigrations extends Command
             $modelName = $modelFile->getFilenameWithoutExtension();
             $modelClass = "App\\Models\\$modelName";
 
-            if (class_exists($modelClass)) {
-                $reflection = new ReflectionClass($modelClass);
-                if ($reflection->hasProperty('fillable')) {
-                    $instance = new $modelClass();
-                    $fillable = $reflection->getProperty('fillable')->getValue($instance);
+            if (!class_exists($modelClass)) continue;
 
-                    $modelFillables[$modelName] = $fillable;
-                    $dependencies = [];
+            $reflection = new ReflectionClass($modelClass);
+            if ($reflection->hasProperty('fillable')) {
+                $instance = new $modelClass();
+                $fillable = $reflection->getProperty('fillable')->getValue($instance);
 
-                    foreach ($fillable as $field) {
-                        if (Str::startsWith($field, 'id_')) {
-                            // Correction casse pour uniformiser
-                            $relatedRaw = Str::replaceFirst('id_', '', $field);
-                            $related = Str::studly($relatedRaw);
-                            $dependencies[] = $related;
-                        }
+                $modelFillables[$modelName] = $fillable;
+                $dependencies = [];
+
+                foreach ($fillable as $field) {
+                    if (Str::startsWith($field, 'id_')) {
+                        $relatedRaw = Str::replaceFirst('id_', '', $field);
+                        $related = Str::studly($relatedRaw);
+                        $dependencies[] = $related;
                     }
-
-                    $modelDependencies[$modelName] = $dependencies;
                 }
+
+                $modelDependencies[$modelName] = $dependencies;
             }
         }
 
-        // Étape 2 : séparer modèles sans id_* et avec id_*
+        // Étape 2 : filtrer si un modèle précis est fourni
+        $targetModel = $this->argument('model');
+        if ($targetModel) {
+            $targetModel = Str::studly($targetModel);
+            if (!isset($modelFillables[$targetModel])) {
+                $this->error("Le modèle $targetModel n'existe pas ou n'a pas de fillable.");
+                return;
+            }
+            $modelFillables = [$targetModel => $modelFillables[$targetModel]];
+            $modelDependencies = [$targetModel => $modelDependencies[$targetModel] ?? []];
+            $this->info("Mode ciblé : génération des migrations uniquement pour $targetModel");
+        }
+
+        // Étape 3 : séparer modèles sans id_* et avec id_*
         $modelsWithoutDeps = [];
         $modelsWithDeps = [];
 
@@ -73,14 +86,12 @@ class GenerateMigrations extends Command
             }
         }
 
-        // Tri topologique pour les modèles avec dépendances
+        // Étape 4 : tri topologique pour modèles avec dépendances
         $sortedWithDeps = [];
         $visited = [];
 
         $visit = function ($model) use (&$visit, &$modelDependencies, &$visited, &$sortedWithDeps, $modelFillables) {
-            if (isset($visited[$model])) {
-                return;
-            }
+            if (isset($visited[$model])) return;
             $visited[$model] = true;
 
             foreach ($modelDependencies[$model] ?? [] as $dependency) {
@@ -101,7 +112,7 @@ class GenerateMigrations extends Command
         // Fusion : d'abord ceux sans dépendances, puis ceux triés avec dépendances
         $sortedModels = array_merge($modelsWithoutDeps, array_diff($sortedWithDeps, $modelsWithoutDeps));
 
-        // Étape 3 : générer les migrations dans le bon ordre
+        // Étape 5 : générer les migrations
         foreach ($sortedModels as $modelName) {
             if (!isset($modelFillables[$modelName])) {
                 $this->warn("Modèle ignoré (non trouvé) : $modelName");
@@ -112,56 +123,40 @@ class GenerateMigrations extends Command
             $this->generateMigration($modelName, $fillable, $migrationPath);
             $this->info("Migration pour $modelName générée.");
         }
+        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
     }
 
+   protected function generateMigration($modelName, $fillable, $migrationPath)
+{
+    $tableName = Str::snake(Str::pluralStudly($modelName));
 
+    // Chercher une migration existante pour ce modèle
+    $existingMigration = collect(File::files($migrationPath))
+        ->first(function ($file) use ($tableName) {
+            return str_contains($file->getFilename(), "create_{$tableName}_table");
+        });
 
-    protected function topologicalSort(array $graph)
-    {
-        $visited = [];
-        $temp = [];
-        $sorted = [];
-
-        $visit = function ($node) use (&$visit, &$visited, &$temp, &$sorted, $graph) {
-            if (isset($temp[$node])) return false; // cycle détecté
-            if (!isset($visited[$node])) {
-                $temp[$node] = true;
-                foreach ($graph[$node] ?? [] as $neighbor) {
-                    if (!$visit($neighbor)) return false;
-                }
-                $visited[$node] = true;
-                unset($temp[$node]);
-                $sorted[] = $node;
-            }
-            return true;
-        };
-
-        foreach (array_keys($graph) as $node) {
-            if (!$visit($node)) return null; // cycle détecté
-        }
-
-        return array_reverse($sorted); // ordre de dépendance
-    }
-
-    protected function generateMigration($modelName, $fillable, $migrationPath)
-    {
-        $tableName = Str::snake(Str::pluralStudly($modelName));
+    if ($existingMigration) {
+        $migrationFile = $existingMigration->getRealPath();
+        $this->info("Migration existante trouvée pour $modelName, elle sera écrasée.");
+    } else {
         $timestamp = now()->format('Y_m_d_His') . uniqid();
         $fileName = "{$timestamp}_create_{$tableName}_table.php";
         $migrationFile = $migrationPath . '/' . $fileName;
+    }
 
-        $columns = '';
-        foreach ($fillable as $field) {
-            if (Str::startsWith($field, 'id_')) {
-                $relatedTable = Str::snake(Str::pluralStudly(Str::replaceFirst('id_', '', $field)));
-                $columns .= "\$table->unsignedBigInteger('$field');\n";
-                $columns .= "\$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('cascade')->onUpdate('cascade');\n";
-            } else {
-                $columns .= "\$table->string('$field');\n";
-            }
+    $columns = '';
+    foreach ($fillable as $field) {
+        if (Str::startsWith($field, 'id_')) {
+            $relatedTable = Str::snake(Str::pluralStudly(Str::replaceFirst('id_', '', $field)));
+            $columns .= "\$table->unsignedBigInteger('$field');\n";
+            $columns .= "\$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('cascade')->onUpdate('cascade');\n";
+        } else {
+            $columns .= "\$table->string('$field');\n";
         }
+    }
 
-        $migrationContent = <<<EOT
+    $migrationContent = <<<EOT
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -179,8 +174,8 @@ return new class extends Migration
         });
 EOT;
 
-        if (in_array(strtolower($tableName), ['users', 'user'])) {
-            $migrationContent .= <<<EOT
+    if (in_array(strtolower($tableName), ['users', 'user'])) {
+        $migrationContent .= <<<EOT
 
         Schema::create('password_reset_tokens', function (Blueprint \$table) {
             \$table->string('email')->primary();
@@ -197,9 +192,9 @@ EOT;
             \$table->integer('last_activity')->index();
         });
 EOT;
-        }
+    }
 
-        $migrationContent .= <<<EOT
+    $migrationContent .= <<<EOT
     }
 
     public function down()
@@ -207,19 +202,20 @@ EOT;
         Schema::dropIfExists('$tableName');
 EOT;
 
-        if (in_array(strtolower($tableName), ['users', 'user'])) {
-            $migrationContent .= <<<EOT
+    if (in_array(strtolower($tableName), ['users', 'user'])) {
+        $migrationContent .= <<<EOT
 
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
 EOT;
-        }
+    }
 
-        $migrationContent .= <<<EOT
+    $migrationContent .= <<<EOT
     }
 };
 EOT;
 
-        File::put($migrationFile, $migrationContent);
-    }
+    File::put($migrationFile, $migrationContent);
+}
+
 }

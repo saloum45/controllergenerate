@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 
 class PackageServiceProvider extends ServiceProvider
 {
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
     public function register()
     {
         // Enregistrer les commandes
@@ -31,6 +32,9 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Console\Commands\GenerateRelations::class, function () {
             return new \App\Console\Commands\GenerateRelations();
         });
+        $this->app->singleton(\App\Console\Commands\GenerateAll::class, function () {
+            return new \App\Console\Commands\GenerateAll();
+        });
 
         $this->commands([
             \App\Console\Commands\GenerateControllers::class,
@@ -38,7 +42,8 @@ class PackageServiceProvider extends ServiceProvider
             \App\Console\Commands\GenerateMigrations::class, // Enregistrement de la commande
             \App\Console\Commands\GenerateSeeders::class,
             \App\Console\Commands\GenerateAngularJson::class,
-            \App\Console\Commands\GenerateRelations::class
+            \App\Console\Commands\GenerateRelations::class,
+            \App\Console\Commands\GenerateAll::class
         ]);
     }
 
@@ -51,7 +56,8 @@ class PackageServiceProvider extends ServiceProvider
             'GenerateMigrations' => 'GenerateMigrations.php', // Chemin pour GenerateMigrations
             'GenerateSeeders' => 'GenerateSeeders.php',
             'GenerateAngularJson' => 'GenerateAngularJson.php',
-            'GenerateRelations' => 'GenerateRelations.php'
+            'GenerateRelations' => 'GenerateRelations.php',
+            'GenerateRelations' => 'GenerateAll.php'
         ];
 
         foreach ($commands as $command => $file) {

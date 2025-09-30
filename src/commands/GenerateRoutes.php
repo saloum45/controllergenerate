@@ -8,52 +8,79 @@ use Illuminate\Support\Str;
 
 class GenerateRoutes extends Command
 {
-    protected $signature = 'generate:routes';
-    protected $description = 'Generate API routes from existing controllers and install API';
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    protected $signature = 'generate:routes {model?}';
+    protected $description = 'Generate API routes from existing controllers (for one model or all) and install API';
 
     public function handle()
     {
         $controllerPath = app_path('Http/Controllers');
         $apiRoutesPath = base_path('routes/api.php');
-        $routesContent = '';
+        $routesContent = "<?php \nuse Illuminate\Support\Facades\Route;\n";
 
-        // Vérifier si le dossier des contrôleurs existe
         if (!File::exists($controllerPath)) {
             $this->error("Le dossier des contrôleurs n'existe pas.");
             return;
         }
 
-        // Lister tous les contrôleurs dans le dossier Http/Controllers
-        $controllers = File::files($controllerPath);
+        $specificModel = $this->argument('model');
 
-        $routesContent = "<?php \nuse Illuminate\Support\Facades\Route;\n";
-        foreach ($controllers as $controller) {
-            $controllerName = $controller->getFilenameWithoutExtension();
-            // S'assurer que c'est bien un contrôleur
-            if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
-                $modelName = Str::replaceLast('Controller', '', $controllerName);
-                $routesContent .= "use App\Http\Controllers\\" . $controllerName . ";\n";
+        if ($specificModel) {
+            // Générer uniquement pour ce modèle et AJOUTER à la fin du fichier api.php
+            $controllerName = "{$specificModel}Controller";
+            $controllerFile = "$controllerPath/{$controllerName}.php";
+
+            if (!File::exists($controllerFile)) {
+                $this->error("Le contrôleur $controllerName n'existe pas.");
+                return;
             }
-        }
-        $routesContent .= "\n";
-        foreach ($controllers as $controller) {
-            $controllerName = $controller->getFilenameWithoutExtension();
-            // S'assurer que c'est bien un contrôleur
-            if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
-                $modelName = Str::replaceLast('Controller', '', $controllerName);
-                $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
-                $this->info("Routes pour $controllerName générées.");
+
+            $routes = "use App\\Http\\Controllers\\{$controllerName};\n\n";
+            $routes .= $this->generateApiRoutes($specificModel, $controllerName);
+
+            // Append au lieu de remplacer
+            File::append($apiRoutesPath, "\n" . $routes);
+
+            $this->info("Routes pour $controllerName ajoutées à la fin de api.php.");
+        } else {
+            // Générer pour TOUS les contrôleurs (remplace le fichier)
+            $controllers = File::files($controllerPath);
+
+            foreach ($controllers as $controller) {
+                $controllerName = $controller->getFilenameWithoutExtension();
+
+                if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
+                    $modelName = Str::replaceLast('Controller', '', $controllerName);
+                    $routesContent .= "use App\\Http\\Controllers\\{$controllerName};\n";
+                }
             }
+
+            $routesContent .= "\n";
+
+            foreach ($controllers as $controller) {
+                $controllerName = $controller->getFilenameWithoutExtension();
+
+                if (Str::endsWith($controllerName, 'Controller') && $controllerName !== 'Controller') {
+                    $modelName = Str::replaceLast('Controller', '', $controllerName);
+                    $routesContent .= $this->generateApiRoutes($modelName, $controllerName);
+                    $this->info("Routes pour $controllerName générées.");
+                }
+            }
+
+            File::put($apiRoutesPath, $routesContent);
+            $this->info("Toutes les routes API ont été régénérées dans api.php.");
+            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
         }
 
-        // Ajouter les routes au fichier api.php
-        if (!empty($routesContent)) {
-            File::put($apiRoutesPath, "\n" . $routesContent);
-            $this->info("Les routes API ont été ajoutées au fichier api.php.");
+        // Exécuter install:api si elle existe
+        try {
+            // $this->call('install:api');
+            if (!File::exists(base_path('routes/api.php'))) {
+                $this->call('install:api');
+            }
+        } catch (\Exception $e) {
+            $this->warn("La commande install:api n'existe pas ou a échoué.");
         }
-
-        // Installer l'API via la commande artisan
-        $this->call('install:api');
     }
 
     protected function generateApiRoutes($modelName, $controllerName)
@@ -70,7 +97,6 @@ Route::get('/{$routeName}/{id}', [{$controllerName}::class, 'show'])->where('id'
 Route::get('/{$routeName}/getformdetails', [{$controllerName}::class, 'getformdetails']);
 EOT;
 
-        // Si le contrôleur est UserController, ajouter les routes login/logout
         if ($controllerName === 'UserController') {
             $routes .= <<<EOT
 

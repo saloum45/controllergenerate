@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 
 class GenerateControllers extends Command
 {
-    protected $signature = 'generate:controllers';
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    protected $signature = 'generate:controllers {model?}';
     protected $description = 'Generate controllers for all models with CRUD methods';
     //
     public function handle()
@@ -22,28 +23,44 @@ class GenerateControllers extends Command
             return;
         }
 
-        $models = File::files($modelsPath);
+        // Vérifie si un modèle spécifique est demandé
+        $specificModel = $this->argument('model');
 
-        foreach ($models as $model) {
-            $modelName = $model->getFilenameWithoutExtension();
-            $controllerName = "{$modelName}Controller";
-            $controllerFullPath = "$controllerPath/{$controllerName}.php";
+        if ($specificModel) {
+            $this->generateControllerForModel($specificModel, $controllerPath);
+        } else {
+            // Aucun modèle spécifique → générer pour tous
+            $models = File::files($modelsPath);
 
-            if (File::exists($controllerFullPath)) {
-                $this->info("Le contrôleur $controllerName existe déjà, donc il sera ignoré.");
-                continue;
+            foreach ($models as $model) {
+                $modelName = $model->getFilenameWithoutExtension();
+                $this->generateControllerForModel($modelName, $controllerPath);
             }
 
-            // Générer le contenu du contrôleur avec les méthodes CRUD
-            $controllerContent = $this->generateControllerContent($controllerName, $modelName);
+            $this->info("Tous les contrôleurs ont été générés !");
+            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+        }
+    }
 
-            // Créer le fichier de contrôleur avec le contenu généré
-            File::put($controllerFullPath, $controllerContent);
+    /**
+     * Génère le contrôleur d’un modèle donné
+     */
+    protected function generateControllerForModel($modelName, $controllerPath)
+    {
+        $controllerName = "{$modelName}Controller";
+        $controllerFullPath = "$controllerPath/{$controllerName}.php";
 
-            $this->info("Contrôleur $controllerName généré avec succès.");
+        if (File::exists($controllerFullPath)) {
+            $this->info("Le contrôleur $controllerName existe déjà, il est ignoré.");
+            return;
         }
 
-        $this->info("Tous les contrôleurs ont été générés !");
+        $controllerContent = $this->generateControllerContent($controllerName, $modelName);
+
+        if ($controllerContent) {
+            File::put($controllerFullPath, $controllerContent);
+            $this->info("Contrôleur $controllerName généré avec succès.");
+        }
     }
 
     protected function generateControllerContent($controllerName, $modelName)
