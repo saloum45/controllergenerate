@@ -57,7 +57,7 @@ class PackageServiceProvider extends ServiceProvider
             'GenerateSeeders' => 'GenerateSeeders.php',
             'GenerateAngularJson' => 'GenerateAngularJson.php',
             'GenerateRelations' => 'GenerateRelations.php',
-            'GenerateRelations' => 'GenerateAll.php'
+            'GenerateAll' => 'GenerateAll.php'
         ];
 
         foreach ($commands as $command => $file) {
