@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 class GenerateAngularJson extends Command
 {
     // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
-    protected $signature = 'taf:angular-json';
+    protected $signature = 'generate:angular';
     protected $description = 'Génère un fichier JSON de configuration à partir de la base de données';
 
     public function handle()
@@ -41,7 +41,23 @@ class GenerateAngularJson extends Command
             ]
         ];
 
+        $ignoredTables = [
+            'migrations',
+            'password_resets',
+            'failed_jobs',
+            'personal_access_tokens',
+            'cache',
+            'cache_locks',
+            'job_batches',
+            'jobs',
+            'password_reset_tokens',
+            'sessions',
+        ];
+
         foreach ($tables as $table) {
+            if (in_array($table->$keyName, $ignoredTables)) {
+                continue;
+            }
             $tableName = $table->$keyName;
             $columns = DB::select("SHOW FULL COLUMNS FROM $tableName");
             $foreignKeys = DB::select("
