@@ -51,7 +51,7 @@ class GenerateControllers extends Command
         $controllerFullPath = "$controllerPath/{$controllerName}.php";
 
         if (File::exists($controllerFullPath)) {
-            $this->info("Le contrôleur $controllerName existe déjà, il est ignoré.");
+            $this->warn("Le contrôleur $controllerName existe déjà, il est ignoré.");
             return;
         }
 
