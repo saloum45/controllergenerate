@@ -135,7 +135,7 @@ php artisan migrate
 
 ---
 
-## Bon code 🧑🏽‍💻 Salem DEV 👈🏽
+## Bon code 🧑🏽‍💻 Salem DEV 👈🏽 fait avec beaucoup de ❤️ et ☕️
 
 ---
 # ControllerGenerate Laravel
@@ -277,4 +277,4 @@ php artisan migrate
 
 ---
 
-## Happy coding 🧑🏽‍💻 Salem DEV 👈🏽  
+## Happy coding 🧑🏽‍💻 Salem DEV 👈🏽 done with a lot of ❤️ and ☕️
