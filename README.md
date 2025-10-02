@@ -1,6 +1,7 @@
+
 # ControllerGenerate Laravel
 
-Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, migrations, routes et relations dans une application Laravel.
+Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, migrations, routes et relations dans une application Laravel(API).
 
 #### Tuto complet :  
 [![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
@@ -27,7 +28,7 @@ composer require saloum45/controllergenerate
 ```
 
 **Configuration** :  
-Le service provider du package `PackageServiceProvider` s’enregistre automatiquement et crée les commandes nécessaires dans le dossier `app/Console/Commands`.
+Une fois installé package crée automatiquement les commandes nécessaires, que vous pouvez exécuter en suivant ces étapes.
 
 ---
 
@@ -39,8 +40,15 @@ Le service provider du package `PackageServiceProvider` s’enregistre automatiq
 php artisan generate:controllers
 ```
 
-- Crée des contrôleurs pour tous les modèles ou un modèle spécifique (php artisan generate:controllers NomModel).
-- Chaque contrôleur contient des **méthodes CRUD**, un endpoint `getFormDetails` pour les clés étrangères, et les méthodes `login`/`logout` pour le modèle `User`.
+- Crée des contrôleurs pour tous les modèles.
+
+```bash
+php artisan generate:controllers NomModel
+```
+
+- Crée le contrôleur pour un modèle spécifique.
+
+- #### Chaque contrôleur contient des **méthodes CRUD**, un endpoint `getFormDetails` pour les clés étrangères, et les méthodes `login`/`logout` pour le modèle `User`.
 
 ---
 
@@ -50,9 +58,14 @@ php artisan generate:controllers
 php artisan generate:routes
 ```
 
-- Crée des routes API pour tous les contrôleurs ou pour un modèle précis (php artisan generate:routes NomModel).
-- Ajoute automatiquement les routes `login` et `logout` pour `UserController`.
-- Si un fichier de routes existe, les nouvelles routes sont ajoutées **à la fin** sans écraser le fichier existant.
+- Crée des routes API pour tous les contrôleurs.
+
+```bash
+php artisan generate:routes NomModel
+```
+- Crée des routes API pour un contrôleur spécifique.
+
+- #### Si un fichier de routes existe, les nouvelles routes sont ajoutées **à la fin** sans écraser le fichier existant.
 
 ---
 
@@ -63,47 +76,48 @@ php artisan generate:migrations
 ```
 
 - Crée les migrations à partir des attributs `$fillable` des modèles.
-- Les migrations sont générées dans le bon ordre en fonction des **dépendances des clés étrangères**.
-- Si une migration existe déjà pour un modèle, elle **est écrasée** pour éviter les duplications.
+
+```bash
+php artisan generate:migrations NomModel
+```
+
+- Crée la migration d'un modèle spécifique.
+
+- #### Les migrations sont générées dans le bon ordre en fonction des **dépendances des clés étrangères**. Si une migration existe déjà pour un modèle, elle **est écrasée** pour éviter les duplications.
 
 ---
 
-### 4️⃣ Générer les relations entre modèles
+### 4️⃣ Générer les relations (belongsTo et hasMany) entre modèles
 
 ```bash
 php artisan generate:relations
 ```
 
-- Analyse les attributs `$fillable` des modèles.
-- Crée automatiquement les relations **belongsTo** et **hasMany**.
-- Peut générer uniquement pour un modèle spécifique si un argument est fourni :
+- Crée les relations de tous les modéles.
 
 ```bash
 php artisan generate:relations NomModel
 ```
+- Crée les relations pour un modèle spécifique.
 
 ---
 
 ### 5️⃣ Commande ultime : tout générer
 
 ```bash
-php artisan generate:all {model?}
+php artisan generate:all
 ```
 
-- Regroupe toutes les commandes ci-dessus en une seule.
-- Argument facultatif `{model}` :  
-  - Si spécifié, ne génère que pour ce modèle.  
-  - Sinon, génère pour tous les modèles.
-- Exemple :
+- Regroupe toutes les commandes ci-dessus en une seule pour tous les modèles.
 
 ```bash
-php artisan generate:all NomModel   # pour un modèle précis
-php artisan generate:all             # pour tous les modèles
+php artisan generate:all NomModel
 ```
+- Regroupe toutes les commandes ci-dessus en une seule pour un modèle spécifique.
 
 ---
 
-### 6️⃣ Exécuter les migrations et seeders
+### 6️⃣ Exécuter les migrations
 
 ```bash
 php artisan migrate
@@ -117,122 +131,135 @@ php artisan migrate
 - **Migrations** : créées dans `database/migrations` dans le bon ordre avec clés étrangères.  
 - **Routes** : ajoutées à `routes/api.php`.  
 - **Relations** : ajoutées automatiquement dans les modèles (belongsTo et hasMany).  
-- Bonus : gestion spéciale pour le modèle `User` avec endpoints `login`/`logout` et tables `sessions` et `password_reset_tokens`.
+- Bonus : gestion spéciale pour le modèle `User` avec endpoints `login`/`logout` avec géneration du token.
 
 ---
 
-## Bon code 👈🏽
+## Bon code 🧑🏽‍💻 Salem DEV 👈🏽
 
 ---
-
-# In English
-
 # ControllerGenerate Laravel
 
-**Saloum45/ControllerGenerate** is a Laravel package that makes it easy to dynamically generate **controllers**, **migrations**, **routes**, and **relations** in a Laravel application.
+**Saloum45/ControllerGenerate** is a Laravel package that makes it easy to dynamically generate **controllers**, **migrations**, **routes**, and **relations** in a Laravel (API) application.
 
-#### Complete tutorial:  
+#### Full tutorial:  
 [![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
 
 ---
 
-### How it works 👉🏽😇
+## How it works 👉🏽😇
 
 1. You must first **create the models**.  
    - Use **PascalCase** for model names, e.g., `StudentClass`.  
    - The package relies on models to generate controllers, migrations, routes, and relations.
 
-2. For **foreign keys**, use the naming convention:  
-   - `id_table_name`, e.g., `id_classe`.
+2. For **foreign keys**, follow this naming convention:  
+   - `id_table_name`, e.g., `id_class`.
 
 ---
 
-### Installation
+## Installation
 
-Add the package to your Laravel project via Composer:
+Add the package to your Laravel project via Composer:  
 
 ```bash
 composer require saloum45/controllergenerate
 ```
 
 **Configuration**:  
-The `PackageServiceProvider` is automatically registered and creates the necessary commands in `app/Console/Commands`.
+Once installed, the package automatically registers the necessary commands, which you can execute as shown below.
 
 ---
 
-### Available commands
+## Available Commands
 
-#### 1️⃣ Generate controllers
+### 1️⃣ Generate controllers
 
 ```bash
 php artisan generate:controllers
 ```
 
-- Creates controllers for all models or a specific model.
-- Each controller contains **CRUD methods**, a `getFormDetails` endpoint for foreign keys, and `login`/`logout` methods for the `User` model.
+- Creates controllers for all models.
+
+```bash
+php artisan generate:controllers ModelName
+```
+
+- Creates a controller for a specific model.
+
+- #### Each controller contains **CRUD methods**, a `getFormDetails` endpoint for foreign keys, and `login`/`logout` methods for the `User` model.
 
 ---
 
-#### 2️⃣ Generate routes
+### 2️⃣ Generate routes
 
 ```bash
 php artisan generate:routes
 ```
 
-- Creates API routes for all controllers or a specific model.
-- Adds `login` and `logout` routes for `UserController`.
-- If the routes file exists, new routes are **added at the end** without overwriting existing routes.
+- Creates API routes for all controllers.
+
+```bash
+php artisan generate:routes ModelName
+```
+
+- Creates API routes for a specific controller.
+
+- #### If a routes file already exists, the new routes are **added at the end** without overwriting the existing file.
 
 ---
 
-#### 3️⃣ Generate migrations
+### 3️⃣ Generate migrations
 
 ```bash
 php artisan generate:migrations
 ```
 
 - Creates migrations based on the `$fillable` attributes of models.
-- Orders migrations according to **foreign key dependencies**.
-- Existing migrations for a model are **overwritten** to avoid duplicates.
+
+```bash
+php artisan generate:migrations ModelName
+```
+
+- Creates the migration for a specific model.
+
+- #### Migrations are generated in the correct order based on **foreign key dependencies**. If a migration already exists for a model, it is **overwritten** to avoid duplicates.
 
 ---
 
-#### 4️⃣ Generate relations between models
+### 4️⃣ Generate model relations (belongsTo and hasMany)
 
 ```bash
 php artisan generate:relations
 ```
 
-- Analyzes `$fillable` attributes.
-- Automatically creates **belongsTo** and **hasMany** relations.
-- Can generate for a specific model only:
+- Creates relations for all models.
 
 ```bash
 php artisan generate:relations ModelName
 ```
 
----
-
-#### 5️⃣ Ultimate command: generate everything
-
-```bash
-php artisan generate:all {model?}
-```
-
-- Runs **Relations, Controllers, Routes, and Migrations** in one command.
-- Optional `{model}` argument:  
-  - Generate for a specific model if provided.  
-  - Otherwise, generate for all models.
-- Example:
-
-```bash
-php artisan generate:all ModelName   # for a specific model
-php artisan generate:all             # for all models
-```
+- Creates relations for a specific model.
 
 ---
 
-#### 6️⃣ Run migrations and seeders
+### 5️⃣ Ultimate command: generate everything
+
+```bash
+php artisan generate:all
+```
+
+- Runs all of the above commands for all models.
+
+```bash
+php artisan generate:all ModelName
+```
+
+- Runs all of the above commands for a specific model.
+
+---
+
+### 6️⃣ Run migrations
 
 ```bash
 php artisan migrate
@@ -240,15 +267,14 @@ php artisan migrate
 
 ---
 
-### Expected result
+## Expected result
 
 - **Controllers**: created in `app/Http/Controllers` with CRUD methods.  
-- **Migrations**: created in `database/migrations` in correct order with foreign keys.  
+- **Migrations**: created in `database/migrations` in the correct order with foreign keys.  
 - **Routes**: added to `routes/api.php`.  
 - **Relations**: automatically added to models (belongsTo and hasMany).  
-- Bonus: `User` model handled specially with `login`/`logout` endpoints and `sessions` & `password_reset_tokens` tables.
+- Bonus: special handling for the `User` model with `login`/`logout` endpoints and token generation.  
 
 ---
 
-## Good code 👈🏽
-
+## Happy coding 🧑🏽‍💻 Salem DEV 👈🏽  

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace saloum45\controllergenerate\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
