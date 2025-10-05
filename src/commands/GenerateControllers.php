@@ -305,17 +305,17 @@ EOT;
     {
         \$request->validate([
             'email' => 'required',
-            'mot_de_passe' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         try {
 
             // \$user = User::where('email', \$request->email)->first();
             \$user = User::where('email', \$request->email)->first();
-            if (!\$user || !Hash::check(\$request->mot_de_passe, \$user->password)) {
+            if (!\$user || !Hash::check(\$request->password, \$user->password)) {
                 return response()->json([
                     'status_code' => 401,
-                    'status_message' => 'telephone ou mot de passe incorrect.'
+                    'status_message' => 'email ou mot de passe incorrect.'
                 ], 401);
             }
 
