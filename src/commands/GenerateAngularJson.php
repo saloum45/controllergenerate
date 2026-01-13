@@ -10,14 +10,27 @@ use Illuminate\Support\Facades\File;
 class GenerateAngularJson extends Command
 {
     // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
-    protected $signature = 'generate:angular';
+    protected $signature = 'generate:angular {table?}';
     protected $description = 'Génère un fichier JSON de configuration à partir de la base de données';
 
     public function handle()
     {
         $databaseName = DB::getDatabaseName();
-        $tables = DB::select("SHOW TABLES");
         $keyName = "Tables_in_$databaseName";
+        $tableParam = $this->argument('table');
+
+        if ($tableParam) {
+            if (!Schema::hasTable($tableParam)) {
+                $this->error("La table '{$tableParam}' n'existe pas.");
+                return Command::FAILURE;
+            }
+
+            $tables = [
+                (object) [$keyName => $tableParam]
+            ];
+        } else {
+            $tables = DB::select("SHOW TABLES");
+        }
 
         $json = [
             'projectName' => 'projet1.angular',
@@ -27,19 +40,22 @@ class GenerateAngularJson extends Command
                 [
                     'module' => 'home',
                     'les_tables' => []
-                ],
-                [
-                    'module' => 'public',
-                    'les_tables' => [
-                        [
-                            'table' => 'login',
-                            'description' => ['login', 'mot_de_passe'],
-                            'les_types' => ['login']
-                        ]
-                    ]
                 ]
             ]
         ];
+        if (!$tableParam) {
+            $json['les_modules'][] = [
+                'module' => 'public',
+                'les_tables' => [
+                    [
+                        'table' => 'login',
+                        'description' => ['login', 'mot_de_passe'],
+                        'les_types' => ['login']
+                    ]
+                ]
+            ];
+        }
+
 
         $ignoredTables = [
             'migrations',
