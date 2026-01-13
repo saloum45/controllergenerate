@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class GenerateAngularJson extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 ->  (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
     protected $signature = 'generate:angular {table?}';
     protected $description = 'Génère un fichier JSON de configuration à partir de la base de données';
 
