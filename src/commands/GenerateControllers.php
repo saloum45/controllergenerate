@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class GenerateControllers extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇
     protected $signature = 'generate:controllers {model?}';
     protected $description = 'Generate controllers for all models with CRUD methods';
     //
@@ -38,7 +38,7 @@ class GenerateControllers extends Command
             }
 
             $this->info("Tous les contrôleurs ont été générés !");
-            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
         }
     }
 

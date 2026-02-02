@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class GenerateAll extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇
     protected $signature = 'generate:all {model?}';
     protected $description = 'Generate Relations, Controllers, Routes, and Migrations for all or a specific model';
 
@@ -31,6 +31,6 @@ class GenerateAll extends Command
         $this->call('generate:migrations', ['model' => $modelName]);
 
         $this->info("✅ Génération complète terminée.");
-        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
     }
 }

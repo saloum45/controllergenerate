@@ -9,7 +9,7 @@ use ReflectionClass;
 
 class GenerateMigrations extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇
     protected $signature = 'generate:migrations {model?}';
     protected $description = 'Generate migrations from existing models based on $fillable attributes and sort them by foreign key dependencies';
 
@@ -123,7 +123,7 @@ class GenerateMigrations extends Command
             $this->generateMigration($modelName, $fillable, $migrationPath);
             $this->info("Migration pour $modelName générée.");
         }
-        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
     }
 
    protected function generateMigration($modelName, $fillable, $migrationPath)

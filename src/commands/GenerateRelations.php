@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class GenerateRelations extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇
     protected $signature = 'generate:relations {model?}';
     protected $description = 'Scan models and generate belongsTo and hasMany relations';
 
@@ -98,7 +98,7 @@ class GenerateRelations extends Command
         }
 
         $this->info("Relations générées avec succès !");
-        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+        $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
     }
 
     protected function injectRelations($filePath, $relationsCode)

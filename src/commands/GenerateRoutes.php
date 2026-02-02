@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class GenerateRoutes extends Command
 {
-    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻
+    // github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇
     protected $signature = 'generate:routes {model?}';
     protected $description = 'Generate API routes from existing controllers (for one model or all) and install API';
 
@@ -69,7 +69,7 @@ class GenerateRoutes extends Command
 
             File::put($apiRoutesPath, $routesContent);
             $this->info("Toutes les routes API ont été régénérées dans api.php.");
-            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 🧑🏽‍💻");
+            $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
         }
 
         // Exécuter install:api si elle existe
