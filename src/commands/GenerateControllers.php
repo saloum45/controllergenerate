@@ -258,14 +258,14 @@ EOT;
         $queries = '';
         foreach ($foreignTables as $field) {
             $table = Str::plural(str_replace('id_', '', $field));
-            $variable = Str::camel($table);
+            $variable = Str::snake($table);
             $model = Str::studly(Str::singular($table));
             $queries .= "        \$$variable = \App\\Models\\$model::all();\n";
         }
 
         $responseArray = implode(",\n            ", array_map(function ($field) {
             $table = Str::plural(str_replace('id_', '', $field));
-            $variable = Str::camel($table);
+            $variable = Str::snake($table);
             return "'$variable' => \$$variable";
         }, $foreignTables));
 
