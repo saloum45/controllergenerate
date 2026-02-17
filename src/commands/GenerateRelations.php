@@ -54,7 +54,8 @@ class GenerateRelations extends Command
                     $relatedClass = "App\\Models\\$relatedModelName";
 
                     if (class_exists($relatedClass)) {
-                        $methodName = lcfirst($relatedModelName);
+                        // $methodName = lcfirst($relatedModelName);
+                        $methodName = Str::snake($relatedModelName);
 
                         // vérifier si la relation existe déjà
                         $existingCode = file_get_contents($data['file']);
@@ -83,7 +84,8 @@ class GenerateRelations extends Command
                     if (str_starts_with($field, 'id_')) {
                         $guessedModel = $this->guessModelNameFromForeignKey($field);
                         if ($guessedModel === $parentClassName) {
-                            $relationName = lcfirst(Str::pluralStudly(class_basename($childClass)));
+                            // $relationName = lcfirst(Str::pluralStudly(class_basename($childClass)));
+                            $relationName = Str::snake(Str::pluralStudly(class_basename($childClass)));
                             $existingCode = file_get_contents($parentData['file']);
 
                             if (!Str::contains($existingCode, "function $relationName(")) {
