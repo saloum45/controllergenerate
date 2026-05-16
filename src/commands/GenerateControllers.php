@@ -313,42 +313,22 @@ EOT;
             // \$user = User::where('email', \$request->email)->first();
             \$user = User::where('email', \$request->email)->first();
             if (!\$user || !Hash::check(\$request->password, \$user->password)) {
-                return response()->json([
-                    'status_code' => 401,
-                    'status_message' => 'email ou mot de passe incorrect.'
-                ], 401);
+                 return \$this->errorResponse('email ou mot de passe incorrect.', 401);
             }
 
             \$token = \$user->createToken('auth_token')->plainTextToken;
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => 'Connexion réussie',
-                'data' => \$user,
-                'token' => \$token
-            ], 200);
+            return \$this->successResponse([\$user,\$token], 'Connexion réussie');
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Erreur lors de la connexion',
-                'error' => \$e->getMessage()
-            ], 500);
+             return \$this->errorResponse('Erreur lors de la connexion', 500, \$e->getMessage());
         }
     }
     public function logout(Request \$request)
     {
         try {
             \$request->user()->currentAccessToken()->delete();
-
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => 'Déconnexion réussie'
-            ]);
+            return \$this->successResponse([], 'Déconnexion réussie');
         } catch (Exception \$e) {
-            return response()->json([
-                'status_code' => 500,
-                'status_message' => 'Erreur lors de la déconnexion',
-                'error' => \$e->getMessage()
-            ], 500);
+            return \$this->errorResponse(Erreur lors de la déconnexion', 500, \$e->getMessage());
         }
     }
     EOT;
