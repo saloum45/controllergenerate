@@ -328,7 +328,7 @@ EOT;
             \$request->user()->currentAccessToken()->delete();
             return \$this->successResponse([], 'Déconnexion réussie');
         } catch (Exception \$e) {
-            return \$this->errorResponse(Erreur lors de la déconnexion', 500, \$e->getMessage());
+            return \$this->errorResponse('Erreur lors de la déconnexion', 500, \$e->getMessage());
         }
     }
     EOT;
