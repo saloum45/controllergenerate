@@ -55,6 +55,10 @@ php artisan generate:controllers NomModel
 ### 2️⃣ Générer les routes
 
 ```bash
+php artisan install:api
+```
+
+```bash
 php artisan generate:routes
 ```
 
@@ -192,6 +196,11 @@ php artisan generate:controllers ModelName
 ---
 
 ### 2️⃣ Generate routes
+
+```bash
+php artisan install:api
+```
+
 
 ```bash
 php artisan generate:routes
