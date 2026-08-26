@@ -1,6 +1,7 @@
 <?php
 
-namespace app\Console\Commands;
+
+namespace App\Console\Commands;
 
 class ProjectAnalyzer
 {
