@@ -504,6 +504,17 @@
          ADD ATTRIBUTE
         -------------------------------------------------- */
 
+        .new-model {
+
+            padding: 15px;
+
+            border-top: 1px solid #e2e8f0;
+
+            background: #f8fafc;
+
+            display: block;
+        }
+
         .new-attribute {
             display: none;
 
@@ -528,6 +539,7 @@
         }
 
         .new-attribute input,
+        .new-model input,
         .new-attribute select {
             border: 1px solid #cbd5e1;
 
@@ -541,6 +553,7 @@
         }
 
         .new-attribute button,
+        .new-model button,
         .reload-button {
             border: 0;
 
@@ -665,9 +678,31 @@
                     Routes All
                 </button>
             </div>
+
+            <div class="summary">
+                <div class="new-attribute open">
+                    <div>
+                        <input
+                            type="text"
+                            class="new-attribute-name"
+                            placeholder="NewModel" id="new_model_input">
+                        <input
+                            type="text"
+                            id="new_model_fillable"
+                            placeholder="Attributes (ex: title,price,description)"
+                            class="new-attribute-name" />
+                        <button
+                            type="button"
+                            onclick="add_new_model()">
+                            Add
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </header>
         {{-- MODELS --}}
-
+        <div class="models" style="text-align: center; margin-bottom: 10px;" id="console-output"></div>
         <div class="models">
 
             @foreach($project['models'] ?? [] as $model)
@@ -1187,9 +1222,7 @@
             const consoleBox = document.getElementById('console-output');
 
             const targetLabel = modelName ? `${command} ${modelName}` : command;
-            // consoleBox.innerText = `[Running] php artisan ${targetLabel}...\nPlease wait...`;
-            // alert(targetLabel);
-            // return;
+            consoleBox.innerText = `[Running] php artisan ${targetLabel}...\nPlease wait...`;
             try {
                 const response = await fetch("{{ route('generator.execute') }}", {
                     method: "POST",
@@ -1206,14 +1239,65 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    // consoleBox.innerText = `>>> Command: php artisan ${data.command}\n\n${data.output}`;
-                    alert(data.message)
+                    consoleBox.innerText = `>>> Command: php artisan ${data.command}\n\n${data.output}`;
                     window.location.reload();
                 } else {
                     alert('Erreur (' + response.status + '): ' + (data.message || 'Impossible d\'ajouter l\'attribut.'));
                 }
             } catch (error) {
                 alert('Erreur de communication avec le serveur. Vérifiez la console (F12).');
+            }
+        }
+
+        async function add_new_model() {
+            let new_model_input = document.getElementById('new_model_input');
+            let new_model_fillable = document.getElementById('new_model_fillable');
+
+            let modelName = new_model_input.value.trim();
+            let fillableFields = new_model_fillable ? new_model_fillable.value.trim() : '';
+
+            if (!modelName) {
+                alert('Veuillez saisir un nom de modèle.');
+                return;
+            }
+
+            const consoleBox = document.getElementById('console-output');
+            if (consoleBox) {
+                consoleBox.innerText = `[Running] php artisan generate:model ${modelName}...\nPlease wait...`;
+            }
+
+            try {
+                const response = await fetch("{{ route('generator.execute') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        command: 'generate:model',
+                        model: modelName,
+                        fillable: fillableFields
+                    })
+                });
+
+                const data = await response.json();
+
+                if (consoleBox) {
+                    if (data.success) {
+                        consoleBox.innerText = `>>> Command: php artisan ${data.command}\n\n${data.output}`;
+                        new_model_input.value = '';
+                        if (new_model_fillable) new_model_fillable.value = '';
+
+                        // Optionnel : Recharger la page pour afficher le nouveau modèle dans la liste
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        consoleBox.innerText = `Error: ${data.message}\n\n${data.output || ''}`;
+                    }
+                }
+            } catch (error) {
+                if (consoleBox) {
+                    consoleBox.innerText = `Request failed: ${error.message}`;
+                }
             }
         }
     </script>

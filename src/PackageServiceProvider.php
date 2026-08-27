@@ -20,6 +20,7 @@ class PackageServiceProvider extends ServiceProvider
             Commands\GenerateAngularJson::class,
             Commands\GenerateRelations::class,
             Commands\GenerateAll::class,
+            Commands\GenerateModel::class,
             Commands\ScanProjectCommand::class
         ]);
     }

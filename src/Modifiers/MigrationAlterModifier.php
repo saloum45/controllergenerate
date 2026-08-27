@@ -15,7 +15,9 @@ class MigrationAlterModifier
     public function addColumn(string $table, string $attribute, string $type): void
     {
         if (! Schema::hasTable($table)) {
-            throw new RuntimeException("La table '{$table}' n'existe pas dans la base de données.");
+            // throw new RuntimeException("La table '{$table}' n'existe pas dans la base de données.");
+            Log::info("La table '{$table}' n'existe pas dans la base de données.");
+            return;
         }
 
         // Si la colonne existe déjà, on ne réexécute pas

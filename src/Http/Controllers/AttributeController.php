@@ -51,6 +51,7 @@ class AttributeController
         'generate:relations',
         'generate:migrations',
         'generate:routes',
+        'generate:model',
     ];
 
     /**
@@ -61,10 +62,12 @@ class AttributeController
         $validated = $request->validate([
             'command' => ['required', 'string'],
             'model' => ['nullable', 'string'],
+            'fillable' => ['nullable', 'string']
         ]);
 
         $command = $validated['command'];
         $model = $validated['model'] ?? null;
+        $fillable = $validated['fillable'] ?? null;
 
         // Sécurité : Vérifie que la commande demandée est bien autorisée
         if (!in_array($command, $this->allowedCommands, true)) {
@@ -80,6 +83,10 @@ class AttributeController
             $parameters['model'] = $model;
         }
 
+        if ($fillable) {
+            $parameters['--fillable'] = $fillable;
+        }
+
         try {
             // Exécution de la commande Artisan
             $exitCode = Artisan::call($command, $parameters);
@@ -93,7 +100,6 @@ class AttributeController
                     ? 'Exécution terminée avec succès.'
                     : 'L\'exécution a rencontré des erreurs.',
             ]);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
