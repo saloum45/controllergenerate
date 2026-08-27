@@ -619,7 +619,7 @@
                 </h1>
 
                 <p>
-                    Laravel API project documentation
+                    Laravel API project ({{ env('APP_NAME') }}) documentation
                     <button class="reload-button" type="button" onclick="reload_page()">Reload</button>
                 </p>
             </div>
