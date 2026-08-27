@@ -4,6 +4,8 @@ namespace saloum45\controllergenerate;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+use Saloum45\ControllerGenerate\Http\Controllers\AttributeController;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -34,5 +36,10 @@ class PackageServiceProvider extends ServiceProvider
         }
 
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'controller-generate-views');
+
+        // Enregistrement de la route POST d'ajout d'attribut
+        Route::middleware(['web'])
+            ->post('/generate/attributes', [AttributeController::class, 'store'])
+            ->name('generate.attributes.store');
     }
 }

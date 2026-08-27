@@ -2,18 +2,16 @@
 <html lang="fr">
 
 <head>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>ControllerGenerate</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -242,8 +240,7 @@
             display: grid;
 
             grid-template-columns:
-                minmax(0, 1.6fr)
-                minmax(280px, 1fr);
+                minmax(0, 1.6fr) minmax(280px, 1fr);
 
             gap: 24px;
         }
@@ -296,8 +293,7 @@
             display: grid;
 
             grid-template-columns:
-                minmax(0, 1fr)
-                150px;
+                minmax(0, 1fr) 150px;
 
             align-items: center;
 
@@ -526,9 +522,7 @@
             display: grid;
 
             grid-template-columns:
-                minmax(0, 1fr)
-                150px
-                auto;
+                minmax(0, 1fr) 150px auto;
 
             gap: 8px;
         }
@@ -603,7 +597,6 @@
             }
 
         }
-
     </style>
 
 </head>
@@ -611,66 +604,64 @@
 
 <body>
 
-<div class="page">
+    <div class="page">
 
 
-    {{-- HEADER --}}
+        {{-- HEADER --}}
 
-    <header class="header">
+        <header class="header">
 
-        <div>
+            <div>
 
-            <h1>
-                ControllerGenerate
-            </h1>
+                <h1>
+                    ControllerGenerate
+                </h1>
 
-            <p>
-                Laravel API project documentation
-            </p>
+                <p>
+                    Laravel API project documentation
+                </p>
 
-        </div>
-
-
-        <div class="summary">
-
-            <div class="summary-item">
-                {{ $project['summary']['models'] ?? 0 }}
-                Models
             </div>
 
-            <div class="summary-item">
-                {{ $project['summary']['controllers'] ?? 0 }}
-                Controllers
+
+            <div class="summary">
+
+                <div class="summary-item">
+                    {{ $project['summary']['models'] ?? 0 }}
+                    Models
+                </div>
+
+                <div class="summary-item">
+                    {{ $project['summary']['controllers'] ?? 0 }}
+                    Controllers
+                </div>
+
+                <div class="summary-item">
+                    {{ $project['summary']['routes'] ?? 0 }}
+                    Routes
+                </div>
+
             </div>
 
-            <div class="summary-item">
-                {{ $project['summary']['routes'] ?? 0 }}
-                Routes
-            </div>
-
-        </div>
-
-    </header>
+        </header>
 
 
-    {{-- MODELS --}}
+        {{-- MODELS --}}
 
-    <div class="models">
+        <div class="models">
 
-        @foreach($project['models'] ?? [] as $model)
+            @foreach($project['models'] ?? [] as $model)
 
             <div
                 class="model"
-                data-model="{{ $model['name'] }}"
-            >
+                data-model="{{ $model['name'] }}">
 
                 {{-- MODEL HEADER --}}
 
                 <button
                     type="button"
                     class="model-header"
-                    onclick="toggleModel(this)"
-                >
+                    onclick="toggleModel(this)">
 
                     <div class="model-main">
 
@@ -742,85 +733,83 @@
                                 <div class="attributes">
 
                                     @foreach(
-                                        $model['fillable'] ?? []
-                                        as $attribute
+                                    $model['fillable'] ?? []
+                                    as $attribute
                                     )
 
-                                        @php
+                                    @php
 
-                                            $column = collect(
-                                                $model['migration']['columns'] ?? []
-                                            )->firstWhere(
-                                                'name',
-                                                $attribute
-                                            );
+                                    $column = collect(
+                                    $model['migration']['columns'] ?? []
+                                    )->firstWhere(
+                                    'name',
+                                    $attribute
+                                    );
 
-                                            $type =
-                                                $column['type']
-                                                ?? 'string';
+                                    $type =
+                                    $column['type']
+                                    ?? 'string';
 
-                                        @endphp
-
-
-                                        <div class="attribute">
-
-                                            <div class="attribute-name">
-
-                                                {{ $attribute }}
-
-                                                @if(
-                                                    $column &&
-                                                    ($column['nullable'] ?? false)
-                                                )
-
-                                                    <small>
-                                                        nullable
-                                                    </small>
-
-                                                @endif
-
-                                            </div>
+                                    @endphp
 
 
-                                            <select
-                                                class="type-select"
-                                                data-model="{{ $model['name'] }}"
-                                                data-attribute="{{ $attribute }}"
-                                            >
+                                    <div class="attribute">
 
-                                                @foreach([
-                                                    'string',
-                                                    'text',
-                                                    'integer',
-                                                    'bigInteger',
-                                                    'unsignedInteger',
-                                                    'decimal',
-                                                    'float',
-                                                    'double',
-                                                    'boolean',
-                                                    'date',
-                                                    'datetime',
-                                                    'timestamp',
-                                                    'time',
-                                                    'json',
-                                                    'uuid',
-                                                    'foreignId',
-                                                ] as $availableType)
+                                        <div class="attribute-name">
 
-                                                    <option
-                                                        value="{{ $availableType }}"
-                                                        @selected(
-                                                            $availableType === $type
-                                                        )
-                                                    >
-                                                        {{ $availableType }}
-                                                    </option>
+                                            {{ $attribute }}
 
-                                                @endforeach
+                                            @if(
+                                            $column &&
+                                            ($column['nullable'] ?? false)
+                                            )
 
-                                            </select>
+                                            <small>
+                                                nullable
+                                            </small>
+
+                                            @endif
 
                                         </div>
+
+
+                                        <select
+                                            class="type-select"
+                                            data-model="{{ $model['name'] }}"
+                                            data-attribute="{{ $attribute }}">
+
+                                            @foreach([
+                                            'string',
+                                            'text',
+                                            'integer',
+                                            'bigInteger',
+                                            'unsignedInteger',
+                                            'decimal',
+                                            'float',
+                                            'double',
+                                            'boolean',
+                                            'date',
+                                            'datetime',
+                                            'timestamp',
+                                            'time',
+                                            'json',
+                                            'uuid',
+                                            'foreignId',
+                                            ] as $availableType)
+
+                                            <option
+                                                value="{{ $availableType }}"
+                                                @selected(
+                                                $availableType===$type
+                                                )>
+                                                {{ $availableType }}
+                                            </option>
+
+                                            @endforeach
+
+                                        </select>
+
+                                    </div>
 
                                     @endforeach
 
@@ -832,20 +821,18 @@
                                 <button
                                     type="button"
                                     class="add-attribute"
-                                    onclick="toggleAddAttribute(this)"
-                                >
+                                    onclick="toggleAddAttribute(this)">
                                     + Add attribute
                                 </button>
 
 
                                 <div class="new-attribute">
 
-                                    <div class="new-attribute-form">
+                                    <!-- <div class="new-attribute-form">
 
                                         <input
                                             type="text"
-                                            placeholder="attribute_name"
-                                        >
+                                            placeholder="attribute_name">
 
                                         <select>
 
@@ -891,10 +878,41 @@
 
                                         </select>
 
-                                        <button type="button">
+                                        <button
+                                            type="button"
+                                            onclick="submitNewAttribute(this, {modelPath: '{{ $model['path'] ?? '' }}',migrationPath: '{{ $model['migration']['path'] ?? '' }}',controllerPath: '{{ $model['controller']['path'] ?? '' }}'})">
                                             Add
                                         </button>
 
+                                    </div> -->
+                                    <div
+                                        class="new-attribute-form"
+                                        data-model-path="{{ $model['path'] ?? '' }}"
+                                        data-migration-path="{{ $model['migration']['path'] ?? '' }}"
+                                        data-controller-path="{{ $model['controller']['path'] ?? '' }}">
+                                        <input
+                                            type="text"
+                                            class="new-attribute-name"
+                                            placeholder="attribute_name">
+
+                                        <select class="new-attribute-type">
+                                            <option value="string">string</option>
+                                            <option value="text">text</option>
+                                            <option value="integer">integer</option>
+                                            <option value="bigInteger">bigInteger</option>
+                                            <option value="boolean">boolean</option>
+                                            <option value="decimal">decimal</option>
+                                            <option value="date">date</option>
+                                            <option value="datetime">datetime</option>
+                                            <option value="json">json</option>
+                                            <option value="foreignId">foreignId</option>
+                                        </select>
+
+                                        <button
+                                            type="button"
+                                            onclick="submitNewAttribute(this)">
+                                            Add
+                                        </button>
                                     </div>
 
                                 </div>
@@ -925,35 +943,35 @@
                                 <div class="relations">
 
                                     @forelse(
-                                        $model['relations'] ?? []
-                                        as $relation
+                                    $model['relations'] ?? []
+                                    as $relation
                                     )
 
-                                        <div class="relation">
+                                    <div class="relation">
 
-                                            <div class="relation-name">
+                                        <div class="relation-name">
 
-                                                {{ $relation['name'] }}
-
-                                            </div>
-
-                                            <div class="relation-details">
-
-                                                {{ $relation['type'] }}
-
-                                                →
-
-                                                {{ $relation['model'] }}
-
-                                            </div>
+                                            {{ $relation['name'] }}
 
                                         </div>
+
+                                        <div class="relation-details">
+
+                                            {{ $relation['type'] }}
+
+                                            →
+
+                                            {{ $relation['model'] }}
+
+                                        </div>
+
+                                    </div>
 
                                     @empty
 
-                                        <div class="empty">
-                                            No relations detected.
-                                        </div>
+                                    <div class="empty">
+                                        No relations detected.
+                                    </div>
 
                                     @endforelse
 
@@ -980,39 +998,39 @@
 
                                 @if($model['controller'] ?? null)
 
-                                    <div class="controller">
+                                <div class="controller">
 
-                                        <div class="controller-name">
+                                    <div class="controller-name">
 
-                                            {{ $model['controller']['name'] }}
-
-                                        </div>
-
-
-                                        <div class="methods">
-
-                                            @foreach(
-                                                $model['controller']['methods'] ?? []
-                                                as $method
-                                            )
-
-                                                <span class="method">
-
-                                                    {{ $method }}
-
-                                                </span>
-
-                                            @endforeach
-
-                                        </div>
+                                        {{ $model['controller']['name'] }}
 
                                     </div>
+
+
+                                    <div class="methods">
+
+                                        @foreach(
+                                        $model['controller']['methods'] ?? []
+                                        as $method
+                                        )
+
+                                        <span class="method">
+
+                                            {{ $method }}
+
+                                        </span>
+
+                                        @endforeach
+
+                                    </div>
+
+                                </div>
 
                                 @else
 
-                                    <div class="empty">
-                                        No controller detected.
-                                    </div>
+                                <div class="empty">
+                                    No controller detected.
+                                </div>
 
                                 @endif
 
@@ -1038,31 +1056,31 @@
                                 <div class="routes">
 
                                     @forelse(
-                                        $model['routes'] ?? []
-                                        as $route
+                                    $model['routes'] ?? []
+                                    as $route
                                     )
 
-                                        <div class="route">
+                                    <div class="route">
 
-                                            <span class="method-label">
+                                        <span class="method-label">
 
-                                                {{ $route['method'] }}
+                                            {{ $route['method'] }}
 
-                                            </span>
+                                        </span>
 
-                                            <span class="route-uri">
+                                        <span class="route-uri">
 
-                                                {{ $route['uri'] }}
+                                            {{ $route['uri'] }}
 
-                                            </span>
+                                        </span>
 
-                                        </div>
+                                    </div>
 
                                     @empty
 
-                                        <div class="empty">
-                                            No routes detected.
-                                        </div>
+                                    <div class="empty">
+                                        No routes detected.
+                                    </div>
 
                                     @endforelse
 
@@ -1078,71 +1096,122 @@
 
             </div>
 
-        @endforeach
+            @endforeach
+
+        </div>
 
     </div>
 
-</div>
+
+    <script>
+        /*
+         * Ouvre / ferme un modèle.
+         */
+        function toggleModel(button) {
+
+            const model =
+                button.closest('.model');
+
+            model.classList.toggle('open');
+
+        }
 
 
-<script>
+        /*
+         * Ouvre le formulaire "Add attribute".
+         */
+        function toggleAddAttribute(button) {
 
-    /*
-     * Ouvre / ferme un modèle.
-     */
-    function toggleModel(button) {
+            const form =
+                button.nextElementSibling;
 
-        const model =
-            button.closest('.model');
+            form.classList.toggle('open');
 
-        model.classList.toggle('open');
-
-    }
+        }
 
 
-    /*
-     * Ouvre le formulaire "Add attribute".
-     */
-    function toggleAddAttribute(button) {
+        /*
+         * Pour l'instant le changement de type
+         * ne modifie pas encore le fichier.
+         *
+         * On branchera ici notre futur
+         * AttributeChangeService.
+         */
+        document
+            .querySelectorAll('.type-select')
+            .forEach(select => {
 
-        const form =
-            button.nextElementSibling;
+                select.addEventListener(
+                    'change',
+                    function() {
 
-        form.classList.toggle('open');
+                        console.log({
+                            model: this.dataset.model,
 
-    }
+                            attribute: this.dataset.attribute,
 
+                            type: this.value
+                        });
 
-    /*
-     * Pour l'instant le changement de type
-     * ne modifie pas encore le fichier.
-     *
-     * On branchera ici notre futur
-     * AttributeChangeService.
-     */
-    document
-        .querySelectorAll('.type-select')
-        .forEach(select => {
+                    }
+                );
 
-            select.addEventListener(
-                'change',
-                function () {
+            });
 
-                    console.log({
-                        model: this.dataset.model,
+        async function submitNewAttribute(button) {
+            const form = button.closest('.new-attribute-form');
+            const nameInput = form.querySelector('.new-attribute-name');
+            const typeSelect = form.querySelector('.new-attribute-type');
 
-                        attribute:
-                            this.dataset.attribute,
+            const attribute = nameInput.value.trim();
+            const type = typeSelect.value;
 
-                        type: this.value
-                    });
+            const modelPath = form.dataset.modelPath;
+            const migrationPath = form.dataset.migrationPath;
+            const controllerPath = form.dataset.controllerPath;
 
+            if (!attribute) {
+                alert('Veuillez entrer un nom d\'attribut.');
+                return;
+            }
+
+            button.disabled = true;
+
+            // Récupération du token CSRF depuis la meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            try {
+                const response = await fetch('/generate/attributes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        attribute: attribute,
+                        type: type,
+                        model_path: modelPath,
+                        migration_path: migrationPath,
+                        controller_path: controllerPath
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    window.location.reload();
+                } else {
+                    alert('Erreur (' + response.status + '): ' + (data.message || 'Impossible d\'ajouter l\'attribut.'));
                 }
-            );
-
-        });
-
-</script>
+            } catch (error) {
+                console.error('Erreur technique :', error);
+                alert('Erreur de communication avec le serveur. Vérifiez la console (F12).');
+            } finally {
+                button.disabled = false;
+            }
+        }
+    </script>
 
 </body>
 
