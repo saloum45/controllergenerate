@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Console\Commands;
+namespace saloum45\controllergenerate\Scanners;
 
 use Illuminate\Support\Facades\File;
 

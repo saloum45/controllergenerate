@@ -18,6 +18,7 @@ class PackageServiceProvider extends ServiceProvider
             Commands\GenerateAngularJson::class,
             Commands\GenerateRelations::class,
             Commands\GenerateAll::class,
+            Commands\ScanProjectCommand::class
         ]);
     }
 
@@ -31,5 +32,7 @@ class PackageServiceProvider extends ServiceProvider
             File::ensureDirectoryExists(app_path('Traits'));
             File::copy($sourceTrait, $destinationTrait);
         }
+
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'controller-generate-views');
     }
 }

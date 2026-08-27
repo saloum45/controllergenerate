@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Console\Commands;
+namespace saloum45\controllergenerate\Scanners;
 
 class ProjectAnalyzer
 {
@@ -74,6 +74,8 @@ class ProjectAnalyzer
                 'name' => $model['name'],
 
                 'class' => $model['class'],
+
+                'path' => $model['path'],
 
                 'table' => $table,
 

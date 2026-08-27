@@ -1,9 +1,11 @@
 <?php
 
 
-namespace App\Console\Commands;
+namespace saloum45\controllergenerate\Commands;
 
 use Illuminate\Console\Command;
+
+use saloum45\controllergenerate\Scanners\ProjectScanner;
 
 class ScanProjectCommand extends Command
 {
