@@ -9,68 +9,60 @@ class ModelModifier
     /**
      * Ajoute un attribut dans $fillable du modèle.
      */
-    public function addAttribute(
-        string $path,
-        string $attribute
-    ): void {
+    public function addAttribute(string $path, string $attribute): void
+    {
         if (! file_exists($path)) {
-            throw new RuntimeException(
-                "Model file not found: {$path}"
-            );
+            throw new RuntimeException("Model file not found: {$path}");
         }
 
         $content = file_get_contents($path);
 
         if ($content === false) {
-            throw new RuntimeException(
-                "Unable to read model file: {$path}"
-            );
+            throw new RuntimeException("Unable to read model file: {$path}");
         }
 
         /*
-         * Vérifie si l'attribut existe déjà
-         * dans le $fillable.
+         * Vérifie si l'attribut existe déjà dans le $fillable.
          */
         if ($this->hasFillableAttribute($content, $attribute)) {
             return;
         }
 
         /*
-         * Recherche précisément :
-         *
-         * protected $fillable = [
-         *     ...
-         * ];
+         * Recherche le bloc :
+         * protected $fillable = [ ... ];
          */
         $pattern = '/(protected\s+\$fillable\s*=\s*\[)(.*?)(\];)/s';
 
         if (! preg_match($pattern, $content, $matches)) {
-            throw new RuntimeException(
-                "The \$fillable property was not found in: {$path}"
-            );
+            throw new RuntimeException("The \$fillable property was not found in: {$path}");
+        }
+
+        $header = $matches[1];
+        $fillableContent = $matches[2];
+        $footer = $matches[3];
+
+        /*
+         * Détermine l'indentation utilisée dans le tableau $fillable.
+         */
+        $indentation = $this->detectIndentation($fillableContent);
+
+        /*
+         * Nettoie les espaces de fin pour gérer l'ajout proprement.
+         */
+        $trimmedContent = rtrim($fillableContent);
+
+        // Si le contenu n'est pas vide et ne finit pas déjà par une virgule, on en ajoute une
+        if (! empty(trim($trimmedContent)) && ! str_ends_with($trimmedContent, ',')) {
+            $trimmedContent .= ',';
         }
 
         /*
-         * On conserve exactement
-         * le contenu existant.
+         * Reconstruit le tableau avec le nouvel attribut correctement aligné.
          */
-        $fillable = $matches[2];
+        $fillableContent = $trimmedContent . "\n" . $indentation . "'" . $attribute . "',\n";
 
-        /*
-         * Détermine l'indentation utilisée.
-         */
-        $indentation = $this->detectIndentation($fillable);
-
-        $fillable .=
-            $indentation .
-            ",'" .
-            $attribute .
-            "',\n";
-
-        $replacement =
-            $matches[1] .
-            $fillable .
-            $matches[3];
+        $replacement = $header . $fillableContent . $footer;
 
         $content = str_replace(
             $matches[0],
@@ -78,49 +70,32 @@ class ModelModifier
             $content
         );
 
-        if (
-            file_put_contents($path, $content) === false
-        ) {
-            throw new RuntimeException(
-                "Unable to write model file: {$path}"
-            );
+        if (file_put_contents($path, $content) === false) {
+            throw new RuntimeException("Unable to write model file: {$path}");
         }
     }
 
     /**
      * Vérifie si l'attribut existe déjà dans $fillable.
      */
-    private function hasFillableAttribute(
-        string $content,
-        string $attribute
-    ): bool {
+    private function hasFillableAttribute(string $content, string $attribute): bool
+    {
         return preg_match(
             '/protected\s+\$fillable\s*=\s*\[(.*?)]\s*;/s',
             $content,
             $matches
-        )
-            && preg_match(
-                "/['\"]" .
-                preg_quote($attribute, '/') .
-                "['\"]/",
-                $matches[1]
-            );
+        ) && preg_match(
+            "/['\"]" . preg_quote($attribute, '/') . "['\"]/",
+            $matches[1]
+        );
     }
 
     /**
-     * Détecte l'indentation utilisée
-     * dans le tableau $fillable.
+     * Détecte l'indentation utilisée dans le tableau $fillable.
      */
-    private function detectIndentation(
-        string $fillable
-    ): string {
-        if (
-            preg_match(
-                '/\n([ \t]+)[\'"]/',
-                $fillable,
-                $matches
-            )
-        ) {
+    private function detectIndentation(string $fillable): string
+    {
+        if (preg_match('/\n([ \t]+)[\'"]/', $fillable, $matches)) {
             return $matches[1];
         }
 

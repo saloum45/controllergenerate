@@ -17,47 +17,34 @@ class MigrationModifier
         bool $unique = false
     ): void {
         if (! file_exists($path)) {
-            throw new RuntimeException(
-                "Migration file not found: {$path}"
-            );
+            throw new RuntimeException("Migration file not found: {$path}");
         }
 
         $content = file_get_contents($path);
 
         if ($content === false) {
-            throw new RuntimeException(
-                "Unable to read migration file: {$path}"
-            );
+            throw new RuntimeException("Unable to read migration file: {$path}");
         }
 
         /*
-         * Ne pas ajouter deux fois
-         * la même colonne.
+         * Ne pas ajouter deux fois la même colonne.
          */
         if ($this->hasColumn($content, $attribute)) {
             return;
         }
 
         /*
-         * On recherche le bloc Schema::create().
-         *
-         * Exemple :
-         *
-         * Schema::create('vehicules', function (Blueprint $table) {
-         *
-         *     ...
-         *
-         * });
+         * Recherche le bloc Schema::create().
          */
         $pattern = '/(Schema::create\s*\([^;]+?\)\s*\{)(.*?)(\n\s*\}\);)/s';
 
         if (! preg_match($pattern, $content, $matches)) {
-            throw new RuntimeException(
-                "Schema::create block not found in: {$path}"
-            );
+            throw new RuntimeException("Schema::create block not found in: {$path}");
         }
 
+        $header = $matches[1];
         $schemaContent = $matches[2];
+        $footer = $matches[3];
 
         /*
          * Génération de la déclaration Laravel.
@@ -70,22 +57,16 @@ class MigrationModifier
         );
 
         /*
-         * On essaie de conserver
-         * l'indentation existante.
+         * Détecte l'indentation de la méthode $table->.
          */
-        $indentation = $this->detectIndentation(
-            $schemaContent
-        );
+        $indentation = $this->detectIndentation($schemaContent);
 
-        $schemaContent .=
-            $indentation .
-            "\n".$column .
-            "\n";
+        /*
+         * Injection propre avec le bon saut de ligne et l'indentation alignée.
+         */
+        $schemaContent = rtrim($schemaContent) . "\n" . $indentation . $column . "\n";
 
-        $replacement =
-            $matches[1] .
-            $schemaContent .
-            $matches[3];
+        $replacement = $header . $schemaContent . $footer;
 
         $content = str_replace(
             $matches[0],
@@ -93,12 +74,8 @@ class MigrationModifier
             $content
         );
 
-        if (
-            file_put_contents($path, $content) === false
-        ) {
-            throw new RuntimeException(
-                "Unable to write migration file: {$path}"
-            );
+        if (file_put_contents($path, $content) === false) {
+            throw new RuntimeException("Unable to write migration file: {$path}");
         }
     }
 
@@ -111,72 +88,40 @@ class MigrationModifier
         string $type
     ): void {
         if (! file_exists($path)) {
-            throw new RuntimeException(
-                "Migration file not found: {$path}"
-            );
+            throw new RuntimeException("Migration file not found: {$path}");
         }
 
         $content = file_get_contents($path);
 
         if ($content === false) {
-            throw new RuntimeException(
-                "Unable to read migration file: {$path}"
-            );
+            throw new RuntimeException("Unable to read migration file: {$path}");
         }
 
-        /*
-         * Recherche :
-         *
-         * $table->string('nom');
-         * $table->integer('nom');
-         * etc.
-         */
-        $pattern =
-            '/(\$table->)' .
-            '[a-zA-Z_][a-zA-Z0-9_]*' .
-            '(\s*\(\s*[\'"]' .
-            preg_quote($attribute, '/') .
-            '[\'"]\s*\)[^;]*;)/';
+        $pattern = '/(\$table->)[a-zA-Z_][a-zA-Z0-9_]*(\s*\(\s*[\'"]' . preg_quote($attribute, '/') . '[\'"]\s*\)[^;]*;)/';
 
         if (! preg_match($pattern, $content)) {
-            throw new RuntimeException(
-                "Column '{$attribute}' not found in migration."
-            );
+            throw new RuntimeException("Column '{$attribute}' not found in migration.");
         }
-
-        $replacement =
-            '$1' .
-            $type .
-            '$2';
 
         $content = preg_replace(
             $pattern,
-            $replacement,
+            '$1' . $type . '$2',
             $content,
             1
         );
 
-        if (
-            file_put_contents($path, $content) === false
-        ) {
-            throw new RuntimeException(
-                "Unable to write migration file: {$path}"
-            );
+        if (file_put_contents($path, $content) === false) {
+            throw new RuntimeException("Unable to write migration file: {$path}");
         }
     }
 
     /**
-     * Vérifie si une colonne existe déjà
-     * dans le bloc de migration.
+     * Vérifie si une colonne existe déjà dans le bloc de migration.
      */
-    private function hasColumn(
-        string $content,
-        string $attribute
-    ): bool {
+    private function hasColumn(string $content, string $attribute): bool
+    {
         return preg_match(
-            '/\$table->[a-zA-Z_][a-zA-Z0-9_]*\s*\(\s*[\'"]' .
-            preg_quote($attribute, '/') .
-            '[\'"]/',
+            '/\$table->[a-zA-Z_][a-zA-Z0-9_]*\s*\(\s*[\'"]' . preg_quote($attribute, '/') . '[\'"]/',
             $content
         ) === 1;
     }
@@ -190,13 +135,7 @@ class MigrationModifier
         bool $nullable,
         bool $unique
     ): string {
-        /*
-         * foreignId nécessite une syntaxe
-         * légèrement différente dans les cas
-         * où nous ajouterons les relations.
-         */
-        $column =
-            "\$table->{$type}('{$attribute}')";
+        $column = "\$table->{$type}('{$attribute}')";
 
         if ($nullable) {
             $column .= '->nullable()';
@@ -212,16 +151,9 @@ class MigrationModifier
     /**
      * Détecte l'indentation du Schema::create().
      */
-    private function detectIndentation(
-        string $schemaContent
-    ): string {
-        if (
-            preg_match(
-                '/\n([ \t]+)\$table->/',
-                $schemaContent,
-                $matches
-            )
-        ) {
+    private function detectIndentation(string $schemaContent): string
+    {
+        if (preg_match('/\n([ \t]+)\$table->/', $schemaContent, $matches)) {
             return $matches[1];
         }
 
