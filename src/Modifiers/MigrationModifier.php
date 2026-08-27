@@ -79,7 +79,7 @@ class MigrationModifier
 
         $schemaContent .=
             $indentation .
-            $column .
+            "\n".$column .
             "\n";
 
         $replacement =
