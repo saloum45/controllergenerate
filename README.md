@@ -30,6 +30,7 @@ composer require saloum45/controllergenerate
 **Configuration** :  
 Une fois installé package crée automatiquement les commandes nécessaires, que vous pouvez exécuter en suivant ces étapes.
 
+
 ---
 
 ## Commandes disponibles
@@ -128,6 +129,12 @@ php artisan migrate
 ```
 
 ---
+**Documentation** :  
+Vous pouvez accéder à la documentation intégrée via cette route, pour apporter modification en interface.
+
+```bash
+http://127.0.0.1:8000/api/generate/docs/
+```
 
 ## Résultat attendu
 
@@ -275,6 +282,12 @@ php artisan migrate
 ```
 
 ---
+**Documentation** :  
+You can access to the integrated documentation via this endpoint, for project editing by interface.
+
+```bash
+http://127.0.0.1:8000/api/generate/docs/
+```
 
 ## Expected result
 
