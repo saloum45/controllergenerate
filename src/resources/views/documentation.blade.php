@@ -620,7 +620,7 @@
 
                 <p>
                     Laravel API project ({{ env('APP_NAME') }}) documentation
-                    <button class="reload-button" type="button" onclick="reload_page()">Reload</button>
+                    <button class="reload-button" type="button" onclick="reload_page()">↺↶↻</button>
                 </p>
             </div>
 
