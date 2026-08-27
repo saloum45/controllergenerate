@@ -774,7 +774,7 @@
                                         </div>
 
 
-                                        <select
+                                        <select disabled
                                             class="type-select"
                                             data-model="{{ $model['name'] }}"
                                             data-attribute="{{ $attribute }}">
