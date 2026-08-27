@@ -41,5 +41,9 @@ class PackageServiceProvider extends ServiceProvider
         Route::middleware(['web'])
             ->post('/generate/attributes', [AttributeController::class, 'store'])
             ->name('generate.attributes.store');
+
+        Route::middleware(['web'])
+            ->post('/generator/execute', [AttributeController::class, 'execute'])
+            ->name('generator/execute.execute');
     }
 }

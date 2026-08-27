@@ -646,7 +646,26 @@
 
         </header>
 
+        <header class="header">
 
+            <div>
+                <button class="reload-button" onclick="runCommand('generate:all')">
+                    Generate All
+                </button>
+                <button class="reload-button" onclick="runCommand('generate:controllers')">
+                    Controllers All
+                </button>
+                <button class="reload-button" onclick="runCommand('generate:relations')">
+                    Relations All
+                </button>
+                <button class="reload-button" onclick="runCommand('generate:migrations')">
+                    Migrations All
+                </button>
+                <button class="reload-button" onclick="runCommand('generate:routes')">
+                    Routes All
+                </button>
+            </div>
+        </header>
         {{-- MODELS --}}
 
         <div class="models">
@@ -828,64 +847,6 @@
 
 
                                 <div class="new-attribute">
-
-                                    <!-- <div class="new-attribute-form">
-
-                                        <input
-                                            type="text"
-                                            placeholder="attribute_name">
-
-                                        <select>
-
-                                            <option value="string">
-                                                string
-                                            </option>
-
-                                            <option value="text">
-                                                text
-                                            </option>
-
-                                            <option value="integer">
-                                                integer
-                                            </option>
-
-                                            <option value="bigInteger">
-                                                bigInteger
-                                            </option>
-
-                                            <option value="boolean">
-                                                boolean
-                                            </option>
-
-                                            <option value="decimal">
-                                                decimal
-                                            </option>
-
-                                            <option value="date">
-                                                date
-                                            </option>
-
-                                            <option value="datetime">
-                                                datetime
-                                            </option>
-
-                                            <option value="json">
-                                                json
-                                            </option>
-
-                                            <option value="foreignId">
-                                                foreignId
-                                            </option>
-
-                                        </select>
-
-                                        <button
-                                            type="button"
-                                            onclick="submitNewAttribute(this, {modelPath: '{{ $model['path'] ?? '' }}',migrationPath: '{{ $model['migration']['path'] ?? '' }}',controllerPath: '{{ $model['controller']['path'] ?? '' }}'})">
-                                            Add
-                                        </button>
-
-                                    </div> -->
                                     <div
                                         class="new-attribute-form"
                                         data-table="{{ $model['table'] ?? '' }}"
@@ -1219,6 +1180,41 @@
 
         function reload_page() {
             window.location.reload();
+        }
+
+        async function runCommand(command, modelName = null) {
+
+            const consoleBox = document.getElementById('console-output');
+
+            const targetLabel = modelName ? `${command} ${modelName}` : command;
+            // consoleBox.innerText = `[Running] php artisan ${targetLabel}...\nPlease wait...`;
+            // alert(targetLabel);
+            // return;
+            try {
+                const response = await fetch("{{ route('generator.execute') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        command: command,
+                        model: modelName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // consoleBox.innerText = `>>> Command: php artisan ${data.command}\n\n${data.output}`;
+                    alert(data.message)
+                    window.location.reload();
+                } else {
+                    alert('Erreur (' + response.status + '): ' + (data.message || 'Impossible d\'ajouter l\'attribut.'));
+                }
+            } catch (error) {
+                alert('Erreur de communication avec le serveur. Vérifiez la console (F12).');
+            }
         }
     </script>
 
