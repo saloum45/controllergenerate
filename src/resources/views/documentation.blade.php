@@ -540,7 +540,7 @@
             font-size: 12px;
         }
 
-        .new-attribute button {
+        .new-attribute button, .reload-button {
             border: 0;
 
             border-radius: 7px;
@@ -619,8 +619,8 @@
 
                 <p>
                     Laravel API project documentation
+                    <button class="reload-button" type="button" onclick="reload_page()">Reload</button>
                 </p>
-
             </div>
 
 
@@ -1210,6 +1210,10 @@
             } finally {
                 button.disabled = false;
             }
+        }
+
+        function reload_page() {
+            window.location.reload();
         }
     </script>
 
