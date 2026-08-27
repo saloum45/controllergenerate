@@ -56,6 +56,7 @@ class GenerateRoutes extends Command
             }
 
             $routesContent .= "use Illuminate\Support\Facades\Artisan;\n";
+            $routesContent .= "use Saloum45\ControllerGenerate\Http\Controllers\AttributeController;\n";
             $routesContent .= "
 // La docs du projet via api/generate/docs
 Route::get('/generate/docs', function () {
@@ -70,6 +71,11 @@ Route::get('/generate/docs', function () {
         compact('project')
     );
 });
+            \n";
+            $routesContent .= "
+// Pour l'exécution des commandes de génération depuis l'interface
+Route::post('/generator/execute', [AttributeController::class, 'execute'])
+    ->name('generator.execute');
             \n";
 
             $routesContent .= "\n";
