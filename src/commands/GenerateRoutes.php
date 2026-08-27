@@ -55,6 +55,21 @@ class GenerateRoutes extends Command
                 }
             }
 
+            $routesContent .= "use saloum45\controllergenerate\Scanners\ProjectScanner;\n";
+            $routesContent .= "
+// La docs du projet via api/generate/docs
+Route::get('/generate/docs', function (
+    ProjectScanner \$scanner
+) {
+    \$project = \$scanner->scan();
+
+    return view(
+        'controller-generate-views::documentation',
+        compact('project')
+    );
+});
+            \n";
+
             $routesContent .= "\n";
 
             foreach ($controllers as $controller) {
