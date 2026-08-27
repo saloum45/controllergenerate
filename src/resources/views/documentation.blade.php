@@ -540,7 +540,8 @@
             font-size: 12px;
         }
 
-        .new-attribute button, .reload-button {
+        .new-attribute button,
+        .reload-button {
             border: 0;
 
             border-radius: 7px;
@@ -887,6 +888,7 @@
                                     </div> -->
                                     <div
                                         class="new-attribute-form"
+                                        data-table="{{ $model['table'] ?? '' }}"
                                         data-model-path="{{ $model['path'] ?? '' }}"
                                         data-migration-path="{{ $model['migration']['path'] ?? '' }}"
                                         data-controller-path="{{ $model['controller']['path'] ?? '' }}">
@@ -1170,6 +1172,8 @@
             const migrationPath = form.dataset.migrationPath;
             const controllerPath = form.dataset.controllerPath;
 
+            const table = form.dataset.table;
+
             if (!attribute) {
                 alert('Veuillez entrer un nom d\'attribut.');
                 return;
@@ -1191,6 +1195,7 @@
                     body: JSON.stringify({
                         attribute: attribute,
                         type: type,
+                        table: table,
                         model_path: modelPath,
                         migration_path: migrationPath,
                         controller_path: controllerPath
