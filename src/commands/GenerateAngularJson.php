@@ -34,8 +34,8 @@ class GenerateAngularJson extends Command
 
         $json = [
             'projectName' => 'projet1.angular',
-            'decription' => 'Fichier de configuration de Taf',
-            'taf_base_url' => 'http://localhost:8000/api/',
+            'decription' => 'Fichier de configuration de AngularGenerate',
+            'config_base_url' => 'http://localhost:8000/api/',
             'les_modules' => [
                 [
                     'module' => 'home',
@@ -164,8 +164,8 @@ class GenerateAngularJson extends Command
             $json['les_modules'][0]['les_tables'][] = $tableJson;
         }
 
-        File::put(base_path('taf.config.json'), json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        $this->info('Fichier taf_config.json généré avec succès.');
+        File::put(base_path('config.json'), json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        $this->info('Fichier config.json généré avec succès.');
         $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it �");
     }
 }
