@@ -55,13 +55,15 @@ class GenerateRoutes extends Command
                 }
             }
 
-            $routesContent .= "use saloum45\controllergenerate\Scanners\ProjectScanner;\n";
+            $routesContent .= "use Illuminate\Support\Facades\Artisan;\n";
             $routesContent .= "
 // La docs du projet via api/generate/docs
-Route::get('/generate/docs', function (
-    ProjectScanner \$scanner
-) {
-    \$project = \$scanner->scan();
+Route::get('/generate/docs', function () {
+    Artisan::call('generate:scan');
+
+    \$jsonOutput = Artisan::output();
+
+    \$project = json_decode(\$jsonOutput, true);
 
     return view(
         'controller-generate-views::documentation',
