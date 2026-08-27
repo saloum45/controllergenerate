@@ -43,7 +43,7 @@ class MigrationScanner
 
             $migration = $this->parseMigration(
                 $file->getFilename(),
-                $content
+                $content,$file->getPathname()
             );
 
             if ($migration !== null) {
@@ -59,7 +59,7 @@ class MigrationScanner
      */
     protected function parseMigration(
         string $filename,
-        string $content
+        string $content,$path
     ): ?array {
         $table = $this->extractTableName($content);
 
@@ -76,6 +76,7 @@ class MigrationScanner
 
         return [
             'file' => $filename,
+            'path'=>$path,
             'table' => $table,
             'columns' => $this->extractColumns($content),
         ];

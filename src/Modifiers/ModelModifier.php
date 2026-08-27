@@ -63,7 +63,7 @@ class ModelModifier
 
         $fillable .=
             $indentation .
-            "'" .
+            ",'" .
             $attribute .
             "',\n";
 
