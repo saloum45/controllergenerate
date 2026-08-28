@@ -781,7 +781,7 @@
                                     <span class="section-title">
                                         Attributes
                                     </span>
-
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:all','{{ $model['name'] }}')">↺↶↻</button>
                                 </div>
 
 
@@ -934,7 +934,7 @@
                                     <span class="section-title">
                                         Relations
                                     </span>
-
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:relations','{{ $model['name'] }}')">↺↶↻</button>
                                 </div>
 
 
@@ -990,7 +990,7 @@
                                     <span class="section-title">
                                         Controller
                                     </span>
-
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:controllers','{{ $model['name'] }}')">↺↶↻</button>
                                 </div>
 
 
@@ -1047,7 +1047,7 @@
                                     <span class="section-title">
                                         Routes
                                     </span>
-
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:routes','{{ $model['name'] }}')">↺↶↻</button>
                                 </div>
 
 
@@ -1218,7 +1218,6 @@
         }
 
         async function runCommand(command, modelName = null) {
-
             const consoleBox = document.getElementById('console-output');
 
             const targetLabel = modelName ? `${command} ${modelName}` : command;
