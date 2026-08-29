@@ -1,6 +1,6 @@
 {
     "name": "saloum45/controllergenerate",
-    "description": "😊Un package Laravel qui facilite la génération dynamique de contrôleurs,migrations et de routes dans une application Laravel😊",
+    "description": "😊Un package Laravel qui facilite la génération dynamique d'API😊",
     "author": "Chitari Tech",
     "type": "library",
     "license": "MIT",
