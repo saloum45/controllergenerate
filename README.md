@@ -1,21 +1,11 @@
 
 # ControllerGenerate Laravel
 
-Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, migrations, routes et relations dans une application Laravel(API).
+Saloum45/ControllerGenerate est un package Laravel qui facilite la génération dynamique de contrôleurs, migrations, routes et relations dans une application Laravel(API), via la doc **web** ou en **ligne de commande**.
 
 #### Tuto complet :  
 [![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
 
----
-
-## Comment ça marche 👉🏽😇
-
-1. Il faut d’abord **créer les modèles**.  
-   - Respectez le **PascalCase** pour le nom des modèles, ex : `EtudiantClasse`.  
-   - Le package se base sur les modèles pour générer les contrôleurs, migrations, routes et relations.
-
-2. Pour les **clés étrangères**, respectez cette nomenclature :  
-   - `id_nom_de_table`, exemple : `id_classe`.
 
 ---
 
@@ -27,13 +17,33 @@ Ajoutez le package à votre projet Laravel via Composer :
 composer require saloum45/controllergenerate
 ```
 
-**Configuration** :  
-Une fois installé package crée automatiquement les commandes nécessaires, que vous pouvez exécuter en suivant ces étapes.
+**Note** :  
+Une fois installé le package crée automatiquement une [documentation Web](http://127.0.0.1:8000/generate/docs/) et les commandes nécessaires, que vous pouvez exécuter en suivant ces étapes.
 
+### Règles 👉🏽😇
+Tout repose sur les modèles et leurs attributs, donc c'est ce qu'on crée en premier. 
+1. Pour  **les modèles**.  
+   - Respectez le **PascalCase** pour le nom des modèles, ex : `EtudiantClasse`.
+
+2. Pour les **clés étrangères**, respectez cette nomenclature :  
+   - `id_nom_de_table`, exemple : `id_classe`.
+
+3. Pour éviter de perdre du code par erreur, à chaque génération il n'y a que les migrations qui sont écrasées.
+
+4. Le package gére les realtions (with) en fonction des clés étrangéres définies dans les modèles
+
+**Documentation** :  
+Vous pouvez accéder à la documentation intégrée et faire les générations via cette route.
+
+```bash
+http://127.0.0.1:8000/generate/docs/
+```
+si vous choisissez la doc web vous pouvez vous arrêter là.
 
 ---
+**Ligne de commande** :  
+Ou si vous préférez les lignes de commandes vous avez aussi le choix en suivant ces étapes ci-dessous
 
-## Commandes disponibles
 
 ### 1️⃣ Générer les contrôleurs
 
@@ -129,12 +139,6 @@ php artisan migrate
 ```
 
 ---
-**Documentation** :  
-Vous pouvez accéder à la documentation intégrée via cette route, pour apporter modification en interface.
-
-```bash
-http://127.0.0.1:8000/api/generate/docs/
-```
 
 ## Résultat attendu
 
@@ -147,156 +151,3 @@ http://127.0.0.1:8000/api/generate/docs/
 ---
 
 ## Bon code 🧑🏽‍💻 Salem DEV 👈🏽 fait avec beaucoup de ❤️ et ☕️
-
----
-# ControllerGenerate Laravel
-
-**Saloum45/ControllerGenerate** is a Laravel package that makes it easy to dynamically generate **controllers**, **migrations**, **routes**, and **relations** in a Laravel (API) application.
-
-#### Full tutorial:  
-[![youtube](https://img.shields.io/badge/youtube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=YJmBQQF3ODU)
-
----
-
-## How it works 👉🏽😇
-
-1. You must first **create the models**.  
-   - Use **PascalCase** for model names, e.g., `StudentClass`.  
-   - The package relies on models to generate controllers, migrations, routes, and relations.
-
-2. For **foreign keys**, follow this naming convention:  
-   - `id_table_name`, e.g., `id_class`.
-
----
-
-## Installation
-
-Add the package to your Laravel project via Composer:  
-
-```bash
-composer require saloum45/controllergenerate
-```
-
-**Configuration**:  
-Once installed, the package automatically registers the necessary commands, which you can execute as shown below.
-
----
-
-## Available Commands
-
-### 1️⃣ Generate controllers
-
-```bash
-php artisan generate:controllers
-```
-
-- Creates controllers for all models.
-
-```bash
-php artisan generate:controllers ModelName
-```
-
-- Creates a controller for a specific model.
-
-- #### Each controller contains **CRUD methods**, a `getFormDetails` endpoint for foreign keys, and `login`/`logout` methods for the `User` model.
-
----
-
-### 2️⃣ Generate routes
-
-```bash
-php artisan install:api
-```
-
-
-```bash
-php artisan generate:routes
-```
-
-- Creates API routes for all controllers.
-
-```bash
-php artisan generate:routes ModelName
-```
-
-- Creates API routes for a specific controller.
-
-- #### If a routes file already exists, the new routes are **added at the end** without overwriting the existing file.
-
----
-
-### 3️⃣ Generate migrations
-
-```bash
-php artisan generate:migrations
-```
-
-- Creates migrations based on the `$fillable` attributes of models.
-
-```bash
-php artisan generate:migrations ModelName
-```
-
-- Creates the migration for a specific model.
-
-- #### Migrations are generated in the correct order based on **foreign key dependencies**. If a migration already exists for a model, it is **overwritten** to avoid duplicates.
-
----
-
-### 4️⃣ Generate model relations (belongsTo and hasMany)
-
-```bash
-php artisan generate:relations
-```
-
-- Creates relations for all models.
-
-```bash
-php artisan generate:relations ModelName
-```
-
-- Creates relations for a specific model.
-
----
-
-### 5️⃣ Ultimate command: generate everything
-
-```bash
-php artisan generate:all
-```
-
-- Runs all of the above commands for all models.
-
-```bash
-php artisan generate:all ModelName
-```
-
-- Runs all of the above commands for a specific model.
-
----
-
-### 6️⃣ Run migrations
-
-```bash
-php artisan migrate
-```
-
----
-**Documentation** :  
-You can access to the integrated documentation via this endpoint, for project editing by interface.
-
-```bash
-http://127.0.0.1:8000/api/generate/docs/
-```
-
-## Expected result
-
-- **Controllers**: created in `app/Http/Controllers` with CRUD methods.  
-- **Migrations**: created in `database/migrations` in the correct order with foreign keys.  
-- **Routes**: added to `routes/api.php`.  
-- **Relations**: automatically added to models (belongsTo and hasMany).  
-- Bonus: special handling for the `User` model with `login`/`logout` endpoints and token generation.  
-
----
-
-## Happy coding 🧑🏽‍💻 Salem DEV 👈🏽 done with a lot of ❤️ and ☕️
