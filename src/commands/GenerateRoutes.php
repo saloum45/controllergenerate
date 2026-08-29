@@ -59,19 +59,6 @@ class GenerateRoutes extends Command
             // Si le fichier n'existe pas ou est vide, initialisation avec les entêtes et routes de base
             if (empty(trim($existingContent))) {
                 $routesContent = "<?php \nuse Illuminate\Support\Facades\Route;\n";
-                $routesContent .= "use Illuminate\Support\Facades\Artisan;\n";
-                $routesContent .= "use Saloum45\ControllerGenerate\Http\Controllers\AttributeController;\n\n";
-
-                $routesContent .= "// La docs du projet via api/generate/docs\n";
-                $routesContent .= "Route::get('/generate/docs', function () {\n";
-                $routesContent .= "    Artisan::call('generate:scan');\n";
-                $routesContent .= "    \$jsonOutput = Artisan::output();\n";
-                $routesContent .= "    \$project = json_decode(\$jsonOutput, true);\n";
-                $routesContent .= "    return view('controller-generate-views::documentation', compact('project'));\n";
-                $routesContent .= "});\n\n";
-
-                $routesContent .= "// Pour l'exécution des commandes de génération depuis l'interface\n";
-                $routesContent .= "Route::post('/generator/execute', [AttributeController::class, 'execute'])->name('generator.execute');\n\n";
 
                 File::put($apiRoutesPath, $routesContent);
                 $existingContent = File::get($apiRoutesPath);

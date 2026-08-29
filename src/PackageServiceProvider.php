@@ -36,15 +36,8 @@ class PackageServiceProvider extends ServiceProvider
             File::copy($sourceTrait, $destinationTrait);
         }
 
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'controller-generate-views');
-
-        // Enregistrement de la route POST d'ajout d'attribut
-        Route::middleware(['web'])
-            ->post('/generate/attributes', [AttributeController::class, 'store'])
-            ->name('generate.attributes.store');
-
-        Route::middleware(['web'])
-            ->post('/generator/execute', [AttributeController::class, 'execute'])
-            ->name('generator/execute.execute');
     }
 }
