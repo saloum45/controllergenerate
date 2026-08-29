@@ -22,15 +22,19 @@ Une fois installé le package crée automatiquement une [documentation Web](http
 
 ### Règles 👉🏽😇
 Tout repose sur les modèles et leurs attributs, donc c'est ce qu'on crée en premier. 
-1. Pour  **les modèles**.  
-   - Respectez le **PascalCase** pour le nom des modèles, ex : `EtudiantClasse`.
+1. Il faut regarder le **tuto Youtub** pour comprendre et éviter les erreurs
+1. Pour  **les modèles**.  Respectez le **PascalCase** pour le nom des modèles, ex : `EtudiantClasse`.
 
-2. Pour les **clés étrangères**, respectez cette nomenclature :  
-   - `id_nom_de_table`, exemple : `id_classe`.
+2. Pour les **clés étrangères**, respectez cette nomenclature   `id_nom_de_table`, exemple : `id_classe`.
 
-3. Pour éviter de perdre du code par erreur, à chaque génération il n'y a que les migrations qui sont écrasées.
 
 4. Le package gére les realtions (with) en fonction des clés étrangéres définies dans les modèles
+
+5. Si un fichier de routes existe, les nouvelles routes sont ajoutées à la fin sans écraser le fichier existant.
+
+6. Chaque contrôleur contient des méthodes CRUD, un endpoint getFormDetails pour les clés étrangères, et les méthodes login/logout pour le modèle User
+
+7. Les migrations sont générées dans le bon ordre en fonction des dépendances des clés étrangères. Si une migration existe déjà pour un modèle, elle est écrasée pour éviter les duplications
 
 **Documentation** :  
 Vous pouvez accéder à la documentation intégrée et faire les générations via cette route.
@@ -59,7 +63,6 @@ php artisan generate:controllers NomModel
 
 - Crée le contrôleur pour un modèle spécifique.
 
-- #### Chaque contrôleur contient des **méthodes CRUD**, un endpoint `getFormDetails` pour les clés étrangères, et les méthodes `login`/`logout` pour le modèle `User`.
 
 ---
 
@@ -80,7 +83,6 @@ php artisan generate:routes NomModel
 ```
 - Crée des routes API pour un contrôleur spécifique.
 
-- #### Si un fichier de routes existe, les nouvelles routes sont ajoutées **à la fin** sans écraser le fichier existant.
 
 ---
 
@@ -98,7 +100,6 @@ php artisan generate:migrations NomModel
 
 - Crée la migration d'un modèle spécifique.
 
-- #### Les migrations sont générées dans le bon ordre en fonction des **dépendances des clés étrangères**. Si une migration existe déjà pour un modèle, elle **est écrasée** pour éviter les duplications.
 
 ---
 
