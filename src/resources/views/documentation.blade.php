@@ -662,22 +662,22 @@
         <header class="header">
 
             <div>
-                <button class="reload-button" onclick="runCommand('generate:all')">
+                <button class="reload-button" onclick="runCommand('generate:all')" title="Générer tout le projet (contrôllers, migrations, routes, relations)">
                     Generate All
                 </button>
-                <button class="reload-button" onclick="runCommand('generate:controllers')">
+                <button class="reload-button" onclick="runCommand('generate:controllers')" title="Générer uniquement les contrôllers">
                     Controllers All
                 </button>
-                <button class="reload-button" onclick="runCommand('generate:relations')">
+                <button class="reload-button" onclick="runCommand('generate:relations')" title="Générer uniquement les relations">
                     Relations All
                 </button>
-                <button class="reload-button" onclick="runCommand('generate:migrations')">
+                <button class="reload-button" onclick="runCommand('generate:migrations')" title="Générer uniquement les migrations">
                     Migrations All
                 </button>
-                <button class="reload-button" onclick="runCommand('generate:routes')">
+                <button class="reload-button" onclick="runCommand('generate:routes')" title="Générer uniquement les routes">
                     Routes All
                 </button>
-                <button class="reload-button" onclick="runCommand('generate:angular')">
+                <button class="reload-button" onclick="runCommand('generate:angular')" title="Générer le fichier config de angular ">
                     Angular
                 </button>
             </div>
@@ -696,7 +696,7 @@
                             class="new-attribute-name" />
                         <button
                             type="button"
-                            onclick="add_new_model()">
+                            onclick="add_new_model()" title="Créer in modèle et ses attributs(optionnel)">
                             Add
                         </button>
                     </div>
@@ -784,7 +784,7 @@
                                     <span class="section-title">
                                         Attributes
                                     </span>
-                                    <button class="reload-button" type="button" onclick="runCommand('generate:all','{{ $model['name'] }}')">↺↶↻</button>
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:all','{{ $model['name'] }}')" title="Générer tout (contrôllers, migrations, routes, relations) pour ce modèle">↺↶↻</button>
                                 </div>
 
 
@@ -911,7 +911,7 @@
 
                                         <button
                                             type="button"
-                                            onclick="submitNewAttribute(this)">
+                                            onclick="submitNewAttribute(this)" title="Rajouter un attribut pour ce modèle">
                                             Add
                                         </button>
                                     </div>
@@ -937,7 +937,7 @@
                                     <span class="section-title">
                                         Relations
                                     </span>
-                                    <button class="reload-button" type="button" onclick="runCommand('generate:relations','{{ $model['name'] }}')">↺↶↻</button>
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:relations','{{ $model['name'] }}')" title="Générer les relations pour ce modèle">↺↶↻</button>
                                 </div>
 
 
@@ -993,7 +993,7 @@
                                     <span class="section-title">
                                         Controller
                                     </span>
-                                    <button class="reload-button" type="button" onclick="runCommand('generate:controllers','{{ $model['name'] }}')">↺↶↻</button>
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:controllers','{{ $model['name'] }}')"  title="Générer les contrôllers pour ce modèle">↺↶↻</button>
                                 </div>
 
 
@@ -1050,7 +1050,7 @@
                                     <span class="section-title">
                                         Routes
                                     </span>
-                                    <button class="reload-button" type="button" onclick="runCommand('generate:routes','{{ $model['name'] }}')">↺↶↻</button>
+                                    <button class="reload-button" type="button" onclick="runCommand('generate:routes','{{ $model['name'] }}')"  title="Générer les routes pour ce modèle">↺↶↻</button>
                                 </div>
 
 
