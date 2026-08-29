@@ -52,6 +52,8 @@ class AttributeController
         'generate:migrations',
         'generate:routes',
         'generate:model',
+        'generate:scan',
+        'generate:angular',
     ];
 
     /**
@@ -92,10 +94,17 @@ class AttributeController
             $exitCode = Artisan::call($command, $parameters);
             $output = Artisan::output();
 
+            // Si c'est un scan, on décode la chaîne JSON retournée par la commande
+            $projectData = null;
+            if ($command === 'generate:scan') {
+                $projectData = json_decode($output, true);
+            }
+
             return response()->json([
                 'success' => $exitCode === 0,
                 'command' => $command . ($model ? " {$model}" : ''),
                 'output' => $output,
+                'project' => $projectData,
                 'message' => $exitCode === 0
                     ? 'Exécution terminée avec succès.'
                     : 'L\'exécution a rencontré des erreurs.',

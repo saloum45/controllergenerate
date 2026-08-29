@@ -17,4 +17,8 @@ Route::middleware(['web'])->group(function () {
     // Exécution des commandes depuis l'interface
     Route::post('/generator/execute', [AttributeController::class, 'execute'])
         ->name('generator.execute');
+
+
+    Route::post('/generate/attributes', [AttributeController::class, 'store'])
+        ->name('generate.attributes.store');
 });

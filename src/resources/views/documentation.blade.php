@@ -677,6 +677,9 @@
                 <button class="reload-button" onclick="runCommand('generate:routes')">
                     Routes All
                 </button>
+                <button class="reload-button" onclick="runCommand('generate:angular')">
+                    Angular
+                </button>
             </div>
 
             <div class="summary">
