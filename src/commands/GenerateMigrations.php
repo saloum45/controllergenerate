@@ -150,7 +150,7 @@ class GenerateMigrations extends Command
         if (Str::startsWith($field, 'id_')) {
             $relatedTable = Str::snake(Str::pluralStudly(Str::replaceFirst('id_', '', $field)));
             $columns .= "\$table->unsignedBigInteger('$field');\n";
-            $columns .= "\$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('cascade')->onUpdate('cascade');\n";
+            $columns .= "\$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('restrict')->onUpdate('restrict');\n";
         } else {
             $columns .= "\$table->string('$field');\n";
         }
