@@ -32,7 +32,9 @@ class GenerateMigrations extends Command
             $modelName = $modelFile->getFilenameWithoutExtension();
             $modelClass = "App\\Models\\$modelName";
 
-            if (!class_exists($modelClass)) continue;
+            if (!class_exists($modelClass)) {
+                continue;
+            }
 
             $reflection = new ReflectionClass($modelClass);
             if ($reflection->hasProperty('fillable')) {
@@ -62,6 +64,7 @@ class GenerateMigrations extends Command
                 $this->error("Le modèle $targetModel n'existe pas ou n'a pas de fillable.");
                 return;
             }
+
             $modelFillables = [$targetModel => $modelFillables[$targetModel]];
             $modelDependencies = [$targetModel => $modelDependencies[$targetModel] ?? []];
             $this->info("Mode ciblé : génération des migrations uniquement pour $targetModel");
@@ -79,6 +82,7 @@ class GenerateMigrations extends Command
                     break;
                 }
             }
+
             if ($hasForeignKey) {
                 $modelsWithDeps[] = $model;
             } else {
@@ -91,7 +95,9 @@ class GenerateMigrations extends Command
         $visited = [];
 
         $visit = function ($model) use (&$visit, &$modelDependencies, &$visited, &$sortedWithDeps, $modelFillables) {
-            if (isset($visited[$model])) return;
+            if (isset($visited[$model])) {
+                return;
+            }
             $visited[$model] = true;
 
             foreach ($modelDependencies[$model] ?? [] as $dependency) {
@@ -123,40 +129,42 @@ class GenerateMigrations extends Command
             $this->generateMigration($modelName, $fillable, $migrationPath);
             $this->info("Migration pour $modelName générée.");
         }
+
         $this->info("github : saloum45 -> (Salem Dev) fait avec beaucoup ❤️ et ☕️ enjoy it 😇");
     }
 
-   protected function generateMigration($modelName, $fillable, $migrationPath)
-{
-    $tableName = Str::snake(Str::pluralStudly($modelName));
+    protected function generateMigration($modelName, $fillable, $migrationPath)
+    {
+        $tableName = Str::snake(Str::pluralStudly($modelName));
 
-    // Chercher une migration existante pour ce modèle
-    $existingMigration = collect(File::files($migrationPath))
-        ->first(function ($file) use ($tableName) {
-            return str_contains($file->getFilename(), "create_{$tableName}_table");
-        });
+        // Chercher une migration existante pour ce modèle
+        $existingMigration = collect(File::files($migrationPath))
+            ->first(function ($file) use ($tableName) {
+                return str_contains($file->getFilename(), "create_{$tableName}_table");
+            });
 
-    if ($existingMigration) {
-        $migrationFile = $existingMigration->getRealPath();
-        $this->info("Migration existante trouvée pour $modelName, elle sera écrasée.");
-    } else {
-        $timestamp = now()->format('Y_m_d_His') . uniqid();
-        $fileName = "{$timestamp}_create_{$tableName}_table.php";
-        $migrationFile = $migrationPath . '/' . $fileName;
-    }
-
-    $columns = '';
-    foreach ($fillable as $field) {
-        if (Str::startsWith($field, 'id_')) {
-            $relatedTable = Str::snake(Str::pluralStudly(Str::replaceFirst('id_', '', $field)));
-            $columns .= "\$table->unsignedBigInteger('$field');\n";
-            $columns .= "\$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('restrict')->onUpdate('restrict');\n";
+        if ($existingMigration) {
+            $migrationFile = $existingMigration->getRealPath();
+            $this->info("Migration existante trouvée pour $modelName, elle sera écrasée.");
         } else {
-            $columns .= "\$table->string('$field');\n";
+            $timestamp = now()->format('Y_m_d_His') . uniqid();
+            $fileName = "{$timestamp}_create_{$tableName}_table.php";
+            $migrationFile = $migrationPath . '/' . $fileName;
         }
-    }
 
-    $migrationContent = <<<EOT
+        $columnLines = [];
+        foreach ($fillable as $field) {
+            if (Str::startsWith($field, 'id_')) {
+                $relatedTable = Str::snake(Str::pluralStudly(Str::replaceFirst('id_', '', $field)));
+                $columnLines[] = "            \$table->unsignedBigInteger('$field');";
+                $columnLines[] = "            \$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('restrict')->onUpdate('cascade');";
+            } else {
+                $columnLines[] = "            \$table->string('$field');";
+            }
+        }
+        $columns = implode("\n", $columnLines);
+
+        $migrationContent = <<<EOT
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -169,13 +177,14 @@ return new class extends Migration
     {
         Schema::create('$tableName', function (Blueprint \$table) {
             \$table->id();
-            $columns
+{$columns}
             \$table->timestamps();
         });
 EOT;
 
-    if (in_array(strtolower($tableName), ['users', 'user'])) {
-        $migrationContent .= <<<EOT
+        if (in_array(strtolower($tableName), ['users', 'user'])) {
+            $migrationContent .= <<<EOT
+
 
         Schema::create('password_reset_tokens', function (Blueprint \$table) {
             \$table->string('email')->primary();
@@ -192,9 +201,10 @@ EOT;
             \$table->integer('last_activity')->index();
         });
 EOT;
-    }
+        }
 
-    $migrationContent .= <<<EOT
+        $migrationContent .= <<<EOT
+
     }
 
     public function down()
@@ -202,20 +212,20 @@ EOT;
         Schema::dropIfExists('$tableName');
 EOT;
 
-    if (in_array(strtolower($tableName), ['users', 'user'])) {
-        $migrationContent .= <<<EOT
+        if (in_array(strtolower($tableName), ['users', 'user'])) {
+            $migrationContent .= <<<EOT
 
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
 EOT;
-    }
+        }
 
-    $migrationContent .= <<<EOT
+        $migrationContent .= <<<EOT
+
     }
 };
 EOT;
 
-    File::put($migrationFile, $migrationContent);
-}
-
+        File::put($migrationFile, $migrationContent);
+    }
 }
