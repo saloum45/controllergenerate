@@ -145,7 +145,7 @@ class GenerateMigrations extends Command
 
         if ($existingMigration) {
             $migrationFile = $existingMigration->getRealPath();
-            $this->info("Migration existante trouvée pour $modelName, elle sera écrasée.");
+            $this->warn("Migration existante trouvée pour $modelName, elle sera écrasée.");
         } else {
             $timestamp = now()->format('Y_m_d_His') . uniqid();
             $fileName = "{$timestamp}_create_{$tableName}_table.php";

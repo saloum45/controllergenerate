@@ -86,7 +86,7 @@ class GenerateRoutes extends Command
                         $this->info("Nouvelles routes pour $controllerName ajoutées.");
                         $addedCount++;
                     } else {
-                        $this->line("Routes pour $controllerName déjà présentes (ignorées).");
+                        $this->warn("Routes pour $controllerName existent déjà, elles sont ignorées.");
                     }
                 }
             }
