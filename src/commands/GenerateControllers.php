@@ -320,7 +320,7 @@ EOT;
             }
 
             \$token = \$user->createToken('auth_token')->plainTextToken;
-            return \$this->successResponse([\$user,\$token], 'Connexion réussie');
+            return \$this->successResponse([ 'user'=> \$user, 'token'=>\$token], 'Connexion réussie');
         } catch (Exception \$e) {
              return \$this->errorResponse('Erreur lors de la connexion', 500, \$e->getMessage());
         }
