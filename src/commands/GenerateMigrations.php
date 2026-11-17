@@ -159,7 +159,7 @@ class GenerateMigrations extends Command
                 $columnLines[] = "            \$table->unsignedBigInteger('$field');";
                 $columnLines[] = "            \$table->foreign('$field')->references('id')->on('$relatedTable')->onDelete('restrict')->onUpdate('cascade');";
             } else {
-                $columnLines[] = "            \$table->string('$field');";
+                $columnLines[] = "            \$table->string('$field')->nullable();";
             }
         }
         $columns = implode("\n", $columnLines);
