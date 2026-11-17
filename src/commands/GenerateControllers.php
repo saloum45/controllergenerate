@@ -249,6 +249,7 @@ EOT;
 EOT;
     }
 
+
     protected function generateGetFormDetailsMethod($fillable)
     {
         $foreignTables = array_filter($fillable, function ($field) {
@@ -257,14 +258,16 @@ EOT;
 
         $queries = '';
         foreach ($foreignTables as $field) {
-            $table = Str::plural(str_replace('id_', '', $field));
+            $rawName = Str::replaceFirst('id_', '', $field);
+            $table = Str::plural($rawName);
             $variable = Str::snake($table);
-            $model = Str::studly(Str::singular($table));
+            $model = Str::studly($rawName); // Conserve le 's' final si le modèle en a un
             $queries .= "        \$$variable = \App\\Models\\$model::all();\n";
         }
 
         $responseArray = implode(",\n            ", array_map(function ($field) {
-            $table = Str::plural(str_replace('id_', '', $field));
+            $rawName = Str::replaceFirst('id_', '', $field);
+            $table = Str::plural($rawName);
             $variable = Str::snake($table);
             return "'$variable' => \$$variable";
         }, $foreignTables));
@@ -273,7 +276,7 @@ EOT;
     /**
      * Get related form details for foreign keys.
      *
-     * @return \\Illuminate\\Http\\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getformdetails()
     {
