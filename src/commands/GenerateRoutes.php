@@ -50,7 +50,6 @@ class GenerateRoutes extends Command
 
             File::append($apiRoutesPath, $routesToAdd);
             $this->info("Routes pour $controllerName ajoutées à la fin de api.php.");
-
         } else {
             // --- MODE 2 : TOUS LES CONTRÔLEURS (NON DESTRUCTIF) ---
             $controllers = File::files($controllerPath);
@@ -174,6 +173,7 @@ EOT;
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
+Route::put('/mot_de_passe_update', [UserController::class, 'mot_de_passe_update']);
 EOT;
         }
 

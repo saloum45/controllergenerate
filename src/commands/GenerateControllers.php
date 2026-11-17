@@ -334,6 +334,25 @@ EOT;
             return \$this->errorResponse('Erreur lors de la déconnexion', 500, \$e->getMessage());
         }
     }
+
+    public function mot_de_passe_update(request \$request)
+    {
+        //
+        try {
+            \$user = Auth()->user();
+            if (!Hash::check(\$request->ancien_mot_de_passe, \$user->password)) {
+                # code...
+                return \$this->errorResponse('Le mot de passe ne correspond pas à l\'ancien', 403);
+            }
+            \$user->password = Hash::make(\$request->nouveau_mot_de_passe);
+            if (\$user->save()) {
+                return \$this->successResponse(\$user, 'Modification réussie');
+            }
+        } catch (Exception \$e) {
+            //throw \$th;
+            return \$this->errorResponse('Modification échouée', 500, \$e->getMessage());
+        }
+    }
     EOT;
     }
 }
